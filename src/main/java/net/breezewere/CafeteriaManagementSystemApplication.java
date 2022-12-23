@@ -7,10 +7,10 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 @SpringBootApplication()
-@EnableJpaRepositories(basePackages = { "net.breezewere.repository" })
+/*@EnableJpaRepositories(basePackages = { "net.breezewere.repository" })
 @ComponentScan(basePackages = { "net.breezewere" })
 // @EnableJpaRepositories(basePackages={"net.breezewere"})
-@EntityScan(basePackages = { "net.breezewere.entity" })
+@EntityScan(basePackages = { "net.breezewere.entity" })*/
 public class CafeteriaManagementSystemApplication {
 
     public static void main(String[] args) {
