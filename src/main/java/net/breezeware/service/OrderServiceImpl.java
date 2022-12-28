@@ -386,7 +386,7 @@ public class OrderServiceImpl implements OrderService {
             userViewDto.setAmount(order.getAmount());
 
             // Create List for Get the List of Food Items with quantity
-            List<ViewUserOrderFoodItem> foodItemAndQuantityList = new ArrayList<>();
+            List<ViewUserOrderFoodItem> foodItemWithQuantityList = new ArrayList<>();
 
             // For each loop is used for Get the List of Food Items for this Order
             for (OrderFoodItemMap foodItems : orderFoodItemList) {
@@ -401,9 +401,9 @@ public class OrderServiceImpl implements OrderService {
                 userOrderFoodItem.setQty(foodItems.getQuantity());
 
                 // Add the FoodItems value in List
-                foodItemAndQuantityList.add(userOrderFoodItem);
+                foodItemWithQuantityList.add(userOrderFoodItem);
                 // Set the Food Item List
-                userViewDto.setFoodItem(foodItemAndQuantityList);
+                userViewDto.setFoodItem(foodItemWithQuantityList);
 
             }
 
@@ -777,7 +777,7 @@ public class OrderServiceImpl implements OrderService {
         // Get the List Of All Orders
         List<Order> orderList = orderRepository.findAll();
 
-        // Get The Completed Order Details
+/*        // Get The Completed Order Details
         OrderViewDto orderUserViewDto = new OrderViewDto();
 
         // Get All Orders using Private method getOrders
@@ -799,9 +799,27 @@ public class OrderServiceImpl implements OrderService {
 
             }
 
-        }
+        }*/
+
+        //Get the Completed Order by Using Private method and Stream
+        OrderViewDto ov = new OrderViewDto();
+        List<OrderViewDto> list = getOrders(orderList).stream()
+                .filter((orderViewDto -> orderViewDto.getStatus().equals(DELIVERED.getStatus())))
+                .filter((orderViewDto -> (orderViewDto.getOrderId() == order.getOrderId()))).map(orderViewDto -> {
+                    ov.setOrderId(orderViewDto.getOrderId());
+                    ov.setFoodItem(orderViewDto.getFoodItem());
+                    ov.setStatus(orderViewDto.getStatus());
+                    ov.setAmount(orderViewDto.getAmount());
+                    try {
+                        ov.setAddress(setAddress(orderViewDto.getOrderId()));
+                    } catch (CustomException e) {
+                        new CustomException("Address is Not Available", HttpStatus.NOT_FOUND);
+                    }
+
+                    return ov;
+                }).collect(Collectors.toList());
 
         // return the Completed Order by id
-        return orderUserViewDto;
+        return ov;
     }
 }
