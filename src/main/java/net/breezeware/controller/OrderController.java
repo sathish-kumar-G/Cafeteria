@@ -5,6 +5,7 @@ import java.util.List;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -48,6 +49,7 @@ public class OrderController {
     private OrderService orderService;
 
     // Add the Food Items to the Order by User
+    @PreAuthorize("hasRole('ROLE_USER')")
     @PostMapping("/user/{user-id}/order")
     @Operation(method = "POST", summary = "Create the Order", description = "Create the Order")
     @io.swagger.v3.oas.annotations.parameters.RequestBody(
@@ -82,6 +84,7 @@ public class OrderController {
     }
 
     // View All Orders by User
+    @PreAuthorize("hasRole('ROLE_USER')")
     @GetMapping("/user/{user-id}/orders")
     @Operation(method = "GET", summary = "Get the User Orders.", description = "Get the User Orders.")
     @Parameters(value = { @Parameter(allowEmptyValue = false, required = true, name = "userId",
@@ -116,6 +119,7 @@ public class OrderController {
     }
 
     // Update the Order by User Using Order Id
+    @PreAuthorize("hasRole('ROLE_USER')")
     @PutMapping("/user/{user-id}/order/{order-id}")
     @Operation(method = "PUT", summary = "Update the Food Items in Order",
             description = "Update the Food Items in Order")
@@ -158,6 +162,7 @@ public class OrderController {
     }
 
     // Place an Order by User
+    @PreAuthorize("hasRole('ROLE_USER')")
     @PostMapping("/user/{user-id}/place-order/{order-id}")
     @Operation(method = "POST", summary = "Place An Order", description = "Place An Order")
     @io.swagger.v3.oas.annotations.parameters.RequestBody(content = @Content(mediaType = "application/json",
@@ -200,6 +205,7 @@ public class OrderController {
     }
 
     // Cancel the Order By User
+    @PreAuthorize("hasRole('ROLE_USER')")
     @DeleteMapping("/user/{user-id}/cancel-order/{order-id}")
     @Operation(method = "DELETE", summary = "Cancel the Order.", description = "Cancel the Order.")
     @Parameters(value = {
@@ -237,6 +243,7 @@ public class OrderController {
     }
 
     // Get the All Active Orders by Staff
+    @PreAuthorize("hasRole('ROLE_STAFF')")
     @GetMapping("/user/{staff-id}/active-orders")
     @Operation(method = "GET", summary = "Get the All Active Orders.", description = "Get the All Active Orders.")
     @Parameters(value = { @Parameter(allowEmptyValue = false, required = true, name = "userId",
@@ -272,6 +279,7 @@ public class OrderController {
     }
 
     // View the Received order by Staff
+    @PreAuthorize("hasRole('ROLE_STAFF')")
     @GetMapping("/user/{staff-id}/received-order/{order-id}")
     @Operation(method = "GET", summary = "View the Received Order.", description = "View the Received Order.")
     @Parameters(value = {
@@ -310,6 +318,7 @@ public class OrderController {
     }
 
     // Update the Order Status to Prepared Order by Staff
+    @PreAuthorize("hasRole('ROLE_STAFF')")
     @PutMapping("/user/{staff-id}/order-prepared/{order-id}")
     @Operation(method = "PUT", summary = "Update Status to Prepared Order.",
             description = "Update Status to Prepared Order.")
@@ -348,6 +357,7 @@ public class OrderController {
     }
 
     // Update the Order Status to Pending Delivery by Staff
+    @PreAuthorize("hasRole('ROLE_STAFF')")
     @PutMapping("/user/{staff-id}/pending-delivery/{order-id}")
     @Operation(method = "PUT", summary = "Update Status to Pending Delivery.",
             description = "Update Status to Pending Delivery.")
@@ -386,6 +396,7 @@ public class OrderController {
     }
 
     // Update the Order Status to Order Delivered by Staff
+    @PreAuthorize("hasRole('ROLE_STAFF')")
     @PutMapping("/user/{staff-id}/order-delivered/{order-id}")
     @Operation(method = "PUT", summary = "Update Status to Order Delivered.",
             description = "Update Status to Order Delivered.")
@@ -424,6 +435,7 @@ public class OrderController {
     }
 
     // View List of Cancel Orders By Staff
+    @PreAuthorize("hasRole('ROLE_STAFF')")
     @GetMapping("/user/{staff-id}/cancel-orders")
     @Operation(method = "GET", summary = "Get the All Cancel Orders.", description = "Get the All Cancel Orders.")
     @Parameters(value = { @Parameter(allowEmptyValue = false, required = true, name = "userId",
@@ -459,6 +471,7 @@ public class OrderController {
     }
 
     // Get the Cancel Order by Staff
+    @PreAuthorize("hasRole('ROLE_STAFF')")
     @GetMapping("/user/{staff-id}/cancel-order/{order-id}")
     @Operation(method = "GET", summary = "View the Cancelled Order.", description = "View the Cancelled Order.")
     @Parameters(value = {
@@ -497,6 +510,7 @@ public class OrderController {
     }
 
     // View List of Completed Orders By Staff
+    @PreAuthorize("hasRole('ROLE_STAFF')")
     @GetMapping("/user/{staff-id}/completed-orders")
     @Operation(method = "GET", summary = "Get the All Completed Orders.", description = "Get the All Completed Orders.")
     @Parameters(value = { @Parameter(allowEmptyValue = false, required = true, name = "userId",
@@ -532,6 +546,7 @@ public class OrderController {
     }
 
     // Get the Completed Order by Staff
+    @PreAuthorize("hasRole('ROLE_STAFF')")
     @GetMapping("/user/{staff-id}/completed-order/{order-id}")
     @Operation(method = "GET", summary = "View the Completed Order.", description = "View the Completed Order.")
     @Parameters(value = {
