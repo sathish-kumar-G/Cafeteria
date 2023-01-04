@@ -5,14 +5,8 @@ import java.util.List;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.*;
 
 import net.breezeware.dto.FoodMenuDto;
 import net.breezeware.dto.FoodMenuUpdateDto;
@@ -23,6 +17,8 @@ import net.breezeware.exception.CustomException;
 import net.breezeware.exception.ErrorResponse;
 import net.breezeware.service.FoodMenuService;
 
+import lombok.extern.slf4j.Slf4j;
+
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.Parameters;
@@ -32,7 +28,6 @@ import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
-import lombok.extern.slf4j.Slf4j;
 
 /**
  * Food Menu Controller is used for create, view, update and delete the Food
@@ -47,6 +42,7 @@ public class FoodMenuController {
     @Autowired
     private FoodMenuService foodMenuService;
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping("/user/{admin-id}/food-menu")
     @Operation(method = "POST", summary = "Create the Food Menu", description = "Create the Food Menu")
     @io.swagger.v3.oas.annotations.parameters.RequestBody(
@@ -84,6 +80,7 @@ public class FoodMenuController {
     }
 
     // View Food Menu By Id
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping("/user/{admin-id}/food-menu/{food-menu-id}")
     @Operation(method = "GET", summary = "Get the Food Menu.", description = "Get the Food Menu.")
     @Parameters(value = {
@@ -122,6 +119,7 @@ public class FoodMenuController {
     }
 
     // Update The Food Menu
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PutMapping("/user/{admin-id}/food-menu/{food-menu-id}")
     @Operation(method = "PUT", summary = "Update the Food Menu", description = "Update the Food Menu")
     @io.swagger.v3.oas.annotations.parameters.RequestBody(content = @Content(mediaType = "application/json",
@@ -164,6 +162,7 @@ public class FoodMenuController {
     }
 
     // Delete the Food Menu
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @DeleteMapping("/user/{admin-id}/food-menu/{food-menu-id}")
     @Operation(method = "DELETE", summary = "Delete the Food Menu.", description = "Delete the Food Menu.")
     @Parameters(value = {
@@ -199,6 +198,7 @@ public class FoodMenuController {
     }
 
     // View All Active Food Menu By User
+    @PreAuthorize("hasRole('ROLE_USER')")
     @GetMapping("/user/{user-id}/food-menus")
     @Operation(method = "GET", summary = "Get the Active All Food Menus", description = "Get the Active All Food Menus")
     @Parameters(value = { @Parameter(allowEmptyValue = false, required = true, name = "userId",

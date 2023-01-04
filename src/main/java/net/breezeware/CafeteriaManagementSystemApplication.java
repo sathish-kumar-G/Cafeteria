@@ -8,7 +8,6 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 /**
  * Main Class
- *
  */
 @SpringBootApplication()
 @EnableJpaRepositories(basePackages = { "net.breezeware.repository" })
