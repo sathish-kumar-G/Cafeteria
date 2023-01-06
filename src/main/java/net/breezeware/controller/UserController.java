@@ -1,5 +1,6 @@
 package net.breezeware.controller;
 
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import java.util.List;
 
 import javax.validation.Valid;
