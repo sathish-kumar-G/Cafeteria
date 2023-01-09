@@ -32,5 +32,5 @@ COPY food /tmp/psql/order/
 EXPOSE 5432
 
 # Docker build & run commands
-# docker build -t rpc-service-db .
-# docker run --name rpc-service-db -p 5432:5432 -it rpc-service-db
+# docker build -t cafeteria .
+# docker run --name cafeteria -p 5432:5432 -it cafeteria

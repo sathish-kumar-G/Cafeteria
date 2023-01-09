@@ -40,6 +40,12 @@ public class UserController {
     private UserService userService;
 
     // Create New User
+    /**
+     * Register or Create the new User.
+     * @param user Object is used to set the new User details.
+     * @return User details and Success Response.
+     * @throws CustomException if the data is null or already a user registered.
+     */
     @PostMapping("/user")
     @Operation(method = "POST", summary = "Create the User", description = "Create the User")
     @io.swagger.v3.oas.annotations.parameters.RequestBody(
@@ -77,6 +83,10 @@ public class UserController {
     }
 
     // Get All User
+    /**
+     * Gets the all User.
+     * @return All User details.
+     */
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping("/users")
     @Operation(method = "GET", summary = "Get the Users", description = "Get the Users")
@@ -112,6 +122,12 @@ public class UserController {
     }
 
     // Get User BY Id
+    /**
+     * Gets the user by id.
+     * @param userId this id is used to find the user.
+     * @return the user.
+     * @throws CustomException if user is not found.
+     */
     @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_USER') or hasRole('ROLE_STAFF')")
     @GetMapping("/user/{user-id}")
     @Operation(method = "GET", summary = "Get the User.", description = "Get the User.")
@@ -150,6 +166,13 @@ public class UserController {
     }
 
     // Update User By Id
+    /**
+     * Update the user by id.
+     * @param user this user data is update.
+     * @param userId this id is used to find the user.
+     * @return updated user.
+     * @throws CustomException if user is not found.
+     */
     @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_USER') or hasRole('ROLE_STAFF')")
     @PutMapping("/user/{user-id}")
     @Operation(method = "PUT", summary = "Update the User", description = "Update the User")
@@ -191,6 +214,11 @@ public class UserController {
     }
 
     // Delete User By Id
+    /**
+     * Delete the user by id.
+     * @param userId this id is used to find the user.
+     * @throws CustomException if user is not found.
+     */
     @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_USER') or hasRole('ROLE_STAFF')")
     @DeleteMapping("/user/{user-id}")
     @Operation(method = "DELETE", summary = "Delete the User.", description = "Delete the User.")

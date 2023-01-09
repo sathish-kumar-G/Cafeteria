@@ -24,6 +24,9 @@ import com.nimbusds.jwt.SignedJWT;
 
 import lombok.extern.slf4j.Slf4j;
 
+/**
+ * JwtFilter is Filter the Request using JWT Token.
+ */
 @Slf4j
 @Component
 public class JwtFilter extends OncePerRequestFilter {

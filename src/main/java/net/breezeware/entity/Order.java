@@ -1,5 +1,6 @@
 package net.breezeware.entity;
 
+import java.io.Serializable;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -16,12 +17,15 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+/**
+ * Order Entity is represented the Order data.
+ */
 @Entity
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "order", schema = "cafeteria_management_system")
-public class Order {
+public class Order implements Serializable {
 
     /**
      * Order id, Primary key and unique.
@@ -41,11 +45,17 @@ public class Order {
     @Column(name = "order_status")
     private String status;
 
+    /**
+     * User Data of the Order.
+     */
     @Schema(example = "1", description = "User Details")
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id")
     private User user;
 
+    /**
+     * Order Total Amount.
+     */
     @Schema(example = "2000", description = "Order Total Amount")
     @Column(name = "order_amount")
     private long amount;

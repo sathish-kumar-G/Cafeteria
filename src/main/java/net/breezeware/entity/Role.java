@@ -1,5 +1,6 @@
 package net.breezeware.entity;
 
+import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -14,17 +15,17 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
- * Entity Class for Role of Users.
+ * Role Class is represents the Role of Users.
  */
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
 @Table(name = "role", schema = "cafeteria_management_system")
-public class Role {
+public class Role implements Serializable {
 
     /**
-     * Role Id, It is Primary Key
+     * Role id, It is Primary Key
      */
     @Schema(example = "1", description = "Role Id")
     @Id

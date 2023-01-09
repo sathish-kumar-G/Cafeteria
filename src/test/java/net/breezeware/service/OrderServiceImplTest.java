@@ -273,7 +273,7 @@ public class OrderServiceImplTest {
         OrderViewDto userViewDto = getOrderDetails();
         userViewDto.setStatus(RECEIVED.getStatus());
 
-        OrderViewDto actual = orderService.viewtheReceivedOrderByStaff(user.getUserId(), order.getOrderId());
+        OrderViewDto actual = orderService.viewTheReceivedOrderByStaff(user.getUserId(), order.getOrderId());
 
         assertEquals(userViewDto, actual);
 

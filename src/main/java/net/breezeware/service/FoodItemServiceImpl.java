@@ -17,6 +17,9 @@ import net.breezeware.repository.FoodItemRepository;
 import net.breezeware.repository.UserRepository;
 import net.breezeware.repository.UserRoleMapRepository;
 
+/**
+ * FoodItemServiceImpl class is used to write the Business logic.
+ */
 @Service
 public class FoodItemServiceImpl implements FoodItemService {
 

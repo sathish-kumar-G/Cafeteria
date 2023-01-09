@@ -30,8 +30,8 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 
 /**
- * Food Menu Controller is used for create, view, update and delete the Food
- * item. Auto wired this FoodMenuController to FoodMenuService Interface.
+ * Food Menu Controller is used for create, view, update and delete the Food Menu with Food
+ * items. Auto wired this FoodMenuController to FoodMenuService Interface.
  */
 
 @RestController
@@ -42,6 +42,14 @@ public class FoodMenuController {
     @Autowired
     private FoodMenuService foodMenuService;
 
+    // Create the new Food Menu with Food Items by Admin
+    /**
+     * Create the new Food Menu with Food Items by Admin.
+     * @param  foodMenu        Food Menu with Food Items details.
+     * @param  userId          this id is used to find the admin.
+     * @return                 Created new Food menu with Food Items.
+     * @throws CustomException if food menu details null or conflict.
+     */
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping("/user/{admin-id}/food-menu")
     @Operation(method = "POST", summary = "Create the Food Menu", description = "Create the Food Menu")
@@ -79,7 +87,14 @@ public class FoodMenuController {
 
     }
 
-    // View Food Menu By Id
+    // View Food Menu By id
+    /**
+     * Gets the Food Menu with Food items by Admin.
+     * @param  foodMenuId      this id is used to fins the foodMenu
+     * @param  userId          this id is used to find the admin.
+     * @return                 the Food Menu with Food Items
+     * @throws CustomException if foodMenu or Admin is not found.
+     */
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping("/user/{admin-id}/food-menu/{food-menu-id}")
     @Operation(method = "GET", summary = "Get the Food Menu.", description = "Get the Food Menu.")
@@ -119,6 +134,14 @@ public class FoodMenuController {
     }
 
     // Update The Food Menu
+    /**
+     * Update the Food Menu with Food Items by Admin.
+     * @param  foodMenuUpdateDto Update the Food Menu and Food Items data.
+     * @param  foodMenuId        this id is used to fins the foodMenu.
+     * @param  userId            this id is used to find the admin.
+     * @return                   Updated Food menu with Food Items.
+     * @throws CustomException   if foodMenu or Admin is not found.
+     */
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PutMapping("/user/{admin-id}/food-menu/{food-menu-id}")
     @Operation(method = "PUT", summary = "Update the Food Menu", description = "Update the Food Menu")
@@ -162,6 +185,12 @@ public class FoodMenuController {
     }
 
     // Delete the Food Menu
+    /**
+     * Delete the Food Menu with Food Items by Admin.
+     * @param  foodMenuId      this id is used to fins the foodMenu.
+     * @param  userId          this id is used to find the admin.
+     * @throws CustomException if foodMenu or Admin is not found.
+     */
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @DeleteMapping("/user/{admin-id}/food-menu/{food-menu-id}")
     @Operation(method = "DELETE", summary = "Delete the Food Menu.", description = "Delete the Food Menu.")
@@ -198,6 +227,12 @@ public class FoodMenuController {
     }
 
     // View All Active Food Menu By User
+    /**
+     * Gets the all Active Food Menu with Food Items by User.
+     * @param  userId          this id is used to find the user.
+     * @return                 All the Active Food Menu with Food Items.
+     * @throws CustomException if foodMenu or User is not found.
+     */
     @PreAuthorize("hasRole('ROLE_USER')")
     @GetMapping("/user/{user-id}/food-menus")
     @Operation(method = "GET", summary = "Get the Active All Food Menus", description = "Get the Active All Food Menus")
@@ -225,10 +260,10 @@ public class FoodMenuController {
                 mediaType = "application.json", schema = @Schema(implementation = ErrorResponse.class),
                 examples = { @ExampleObject(name = "Error-415",
                         value = "{\"statusCode\":\"415\",\"message\":\"Unsupported Media Type\",\"details\":\"Please Enter Correct Value\"}") })) })
-    public List<FoodMenuViewUserDto> viewAllActiveFoodMenu(@PathVariable(name = "user-id") long userId)
+    public List<FoodMenuViewUserDto> viewAllActiveFoodMenuByUser(@PathVariable(name = "user-id") long userId)
             throws CustomException {
         log.info("Entering viewAllActiveFoodMenu");
-        List<FoodMenuViewUserDto> findFoodMenu = foodMenuService.getAllActiveFoodMenu(userId);
+        List<FoodMenuViewUserDto> findFoodMenu = foodMenuService.viewAllActiveFoodMenuByUser(userId);
         log.info("Leaving viewAllActiveFoodMenu");
         return findFoodMenu;
     }

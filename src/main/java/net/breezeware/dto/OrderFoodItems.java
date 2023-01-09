@@ -9,7 +9,13 @@ import lombok.Data;
 @Data
 public class OrderFoodItems {
 
+    /**
+     *
+     */
     private long foodItemId;
 
+    /**
+     *
+     */
     private long qty;
 }

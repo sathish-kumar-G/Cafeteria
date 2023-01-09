@@ -1,5 +1,6 @@
 package net.breezeware.entity;
 
+import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -15,17 +16,17 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
- * User Entity Class. Declare all User details in this Class.
+ * User Entity Class. Declare all User entity in this Class.
  */
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
 @Table(name = "user", schema = "cafeteria_management_system")
-public class User {
+public class User implements Serializable {
 
     /**
-     * User Id it is primary key for this entity.
+     * user_id  is primary key for this entity.
      */
     @Schema(example = "1", description = "User Id")
     @Id
@@ -36,35 +37,36 @@ public class User {
     private long userId;
 
     /**
-     * First_Name for user
+     * first_Name for user
      */
     @Schema(example = "sathish", description = "First Name")
     @Column(name = "first_name")
     private String firstName;
 
     /**
-     * Last_Name for user
+     * last_Name for user
      */
     @Schema(example = "kumar", description = "Last Name")
     @Column(name = "last_name")
     private String lastName;
 
     /**
-     * Email_Id for user
+     * email_Id for user
      */
     @Schema(example = "sathish@gmail.com", description = "Email Id")
     @Column(name = "email")
     private String emailId;
 
     /**
-     * Password for user
+     * password for user
      */
     @Schema(example = "sathish@123", description = "Password")
     @Column(name = "password")
     private String password;
 
     /**
-     * Role Of the User
+     * role_id Of the User.
+     * It is Transient variable.
      */
     @Schema(example = "1", description = "Role Id")
     @Transient

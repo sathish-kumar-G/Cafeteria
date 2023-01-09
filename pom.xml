@@ -49,12 +49,6 @@
             <artifactId>javax.persistence-api</artifactId>
         </dependency>
 
-        <!-- https://mvnrepository.com/artifact/org.apache.maven.plugins/maven-javadoc-plugin -->
-        <dependency>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-javadoc-plugin</artifactId>
-            <version>3.4.1</version>
-        </dependency>
 
         <dependency>
             <groupId>org.springdoc</groupId>
@@ -74,12 +68,13 @@
 
     </dependencies>
 
+
     <build>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
-
+                <version>2.6.3</version>
                 <configuration>
                     <excludes>
                         <exclude>
@@ -89,7 +84,60 @@
                     </excludes>
                 </configuration>
             </plugin>
+            <!--            <plugin>-->
+            <!--                <groupId>org.apache.maven.plugins</groupId>-->
+            <!--                <artifactId>maven-javadoc-plugin</artifactId>-->
+            <!--                <version>3.4.1</version>-->
+            <!--                <configuration>-->
+            <!--                    <detectLinks>true</detectLinks>-->
+            <!--                </configuration>-->
+            <!--                <executions>-->
+            <!--                    <execution>-->
+            <!--                        <goals>-->
+            <!--                            <goal>javadoc</goal>-->
+            <!--                            <goal>test-javadoc</goal>-->
+            <!--                        </goals>-->
+            <!--                    </execution>-->
+            <!--                </executions>-->
+            <!--            </plugin>-->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-site-plugin</artifactId>
+                <version>3.9.1</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>site</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
         </plugins>
     </build>
+
+    <reporting>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>3.4.1</version>
+                <configuration>
+                    <detectLinks>true</detectLinks>
+             <!--       <sourceFileExcludes>
+                        <sourceFileExclude>/home/sathishkumar/Documents/workspace-spring-tool-suite-4-4.16.1.RELEASE/CafeteriaManagementSystem/src/main/java/net/breezeware/CafeteriaManagementSystemApplication.java</sourceFileExclude>
+                        <sourceFileExclude>src/main/java/net/breezeware/controller</sourceFileExclude>
+                    </sourceFileExcludes>-->
+                    <excludePackageNames>net.breezeware.CafeteriaManagementSystemApplication:net.breezeware.controller.*</excludePackageNames>
+                </configuration>
+                <reportSets>
+                    <reportSet>
+                        <reports>
+                            <report>javadoc</report>
+                        </reports>
+                    </reportSet>
+                </reportSets>
+            </plugin>
+        </plugins>
+    </reporting>
 
 </project>

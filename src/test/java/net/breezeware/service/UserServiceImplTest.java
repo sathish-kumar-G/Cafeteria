@@ -26,8 +26,10 @@ import net.breezeware.repository.RoleRepository;
 import net.breezeware.repository.UserRepository;
 import net.breezeware.repository.UserRoleMapRepository;
 
+/**
+ * This test class is tested the all userService Cases.
+ */
 @SpringBootTest
-// @ExtendWith(MockitoExtension.class)
 @DisplayName("User Test")
 class UserServiceImplTest {
 
@@ -46,6 +48,7 @@ class UserServiceImplTest {
     // User Instance create before All Test case
     User user;
 
+    // This init method is used for create the user instance before all method is tested.
     @BeforeEach
     void init() {
         user = new User();
@@ -101,7 +104,6 @@ class UserServiceImplTest {
     @Test
     @DisplayName("Get All User Test")
     void testGetUser() {
-        // User user = new User();
         // User case
         List<User> users = new ArrayList<>();
         users.add(user);
@@ -126,8 +128,6 @@ class UserServiceImplTest {
     @DisplayName("User Find By Id Test")
     void testUserFindById() throws CustomException {
 
-        // User user = new User();
-
         // User case
         when(repository.findById(anyLong())).thenReturn(Optional.of(user));
 
@@ -144,7 +144,7 @@ class UserServiceImplTest {
         assertEquals(foundUser, user);
     }
 
-    // Update User By Id Test Case
+    // Update User By id Test Case
     @Test
     @DisplayName("Update User Test case")
     void testUpdateUserById() throws CustomException {

@@ -15,6 +15,9 @@ import net.breezeware.repository.RoleRepository;
 import net.breezeware.repository.UserRepository;
 import net.breezeware.repository.UserRoleMapRepository;
 
+/**
+ * UserServiceImpl class is used to write the Business logic.
+ */
 @Service
 public class UserServiceImpl implements UserService {
 

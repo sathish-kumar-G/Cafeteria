@@ -1,40 +1,26 @@
 package net.breezeware.service;
 
+import static net.breezeware.enumeration.OrderStatus.*;
+
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
-
 import java.util.stream.Collectors;
+
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
-import net.breezeware.dto.AddressDto;
-import net.breezeware.dto.OrderDto;
-import net.breezeware.dto.OrderFoodItems;
-import net.breezeware.dto.OrderUpdateDto;
-import net.breezeware.dto.OrderViewDto;
-import net.breezeware.dto.ViewUserOrderFoodItem;
-import net.breezeware.entity.FoodItem;
-import net.breezeware.entity.FoodMenuItemMap;
-import net.breezeware.entity.Order;
-import net.breezeware.entity.OrderAddressMap;
-import net.breezeware.entity.OrderFoodItemMap;
-import net.breezeware.entity.User;
-import net.breezeware.entity.UserRoleMap;
+import net.breezeware.dto.*;
+import net.breezeware.entity.*;
 import net.breezeware.exception.CustomException;
-import net.breezeware.repository.FoodItemRepository;
-import net.breezeware.repository.FoodMenuItemMapRepository;
-import net.breezeware.repository.OrderAddressMapRepository;
-import net.breezeware.repository.OrderFoodItemMapRepository;
-import net.breezeware.repository.OrderRepository;
-import net.breezeware.repository.UserRepository;
-import net.breezeware.repository.UserRoleMapRepository;
+import net.breezeware.repository.*;
 
-import static net.breezeware.enumeration.OrderStatus.*;
-
+/**
+ * OrderService class is used to write the Business logic.
+ */
 @Service
 public class OrderServiceImpl implements OrderService {
 
@@ -443,7 +429,7 @@ public class OrderServiceImpl implements OrderService {
      * {@inheritDoc}
      */
     @Override
-    public OrderViewDto viewtheReceivedOrderByStaff(long userId, long orderId) throws CustomException {
+    public OrderViewDto viewTheReceivedOrderByStaff(long userId, long orderId) throws CustomException {
 
         // Check Staff Access and Get the Order using Private Method
         Order order = staffAccessAndOrderChecking(userId, orderId);
@@ -465,8 +451,8 @@ public class OrderServiceImpl implements OrderService {
         for (OrderViewDto orders : allOrders) {
 
             // Check the Order is Active or not And Get the Order by Order id
-            if ((orders.getStatus().equals(PLACED.getStatus()) || orders.getStatus().equals(RECEIVED.getStatus())) && (
-                    orders.getOrderId() == order.getOrderId())) {
+            if ((orders.getStatus().equals(PLACED.getStatus()) || orders.getStatus().equals(RECEIVED.getStatus()))
+                    && (orders.getOrderId() == order.getOrderId())) {
 
                 // Set the Orders details in dto to view staff
                 orderUserViewDto.setOrderId(orders.getOrderId());
@@ -619,23 +605,17 @@ public class OrderServiceImpl implements OrderService {
         // Get List of Orders for this User
         List<Order> orderList = orderRepository.findAll();
 
-/*        // Get the Cancel Orders List
-        List<OrderViewDto> cancelOrders = new ArrayList<>();
-        // Get All Orders using Private method getOrders
-        List<OrderViewDto> allOrders = getOrders(orderList);
-        // for Each loop is used for get the Active Orders
-        for (OrderViewDto orders : allOrders) {
-
-            // Check the Order is Cancelled or not
-            if (orders.getStatus().equals(CANCEL.getStatus())) {
-                // Set the Order Address Details using Private method getOrderId()
-                orders.setAddress(setAddress(orders.getOrderId()));
-                // Add the Cancel Orders
-                cancelOrders.add(orders);
-
-            }
-
-        }*/
+        /*
+         * // Get the Cancel Orders List List<OrderViewDto> cancelOrders = new
+         * ArrayList<>(); // Get All Orders using Private method getOrders
+         * List<OrderViewDto> allOrders = getOrders(orderList); // for Each loop is used
+         * for get the Active Orders for (OrderViewDto orders : allOrders) { // Check
+         * the Order is Cancelled or not if
+         * (orders.getStatus().equals(CANCEL.getStatus())) { // Set the Order Address
+         * Details using Private method getOrderId()
+         * orders.setAddress(setAddress(orders.getOrderId())); // Add the Cancel Orders
+         * cancelOrders.add(orders); } }
+         */
 
         // Get the Cancel Orders List using Stream and Private Method
         List<OrderViewDto> cancelOrders = new ArrayList<>();
@@ -670,30 +650,24 @@ public class OrderServiceImpl implements OrderService {
         // Get The Cancel Order Details
         OrderViewDto orderUserViewDto = new OrderViewDto();
 
-/*        // Get All Orders using Private method getOrders
-        List<OrderViewDto> allOrders = getOrders(orderList);
-        // for Each loop is used for get the Order by id
-        for (OrderViewDto orders : allOrders) {
-
-            // Check the Order is Cancelled or not And Get the Order by Order id
-            if (orders.getStatus().equals(CANCEL.getStatus()) && (orders.getOrderId() == order.getOrderId())) {
-
-                // Set the Orders details in dto to view staff
-                orderUserViewDto.setOrderId(orders.getOrderId());
-                orderUserViewDto.setFoodItem(orders.getFoodItem());
-                // Set the Order Address Details using Private method getOrderId()
-                orderUserViewDto.setAddress(setAddress(orders.getOrderId()));
-                orderUserViewDto.setAmount(orders.getAmount());
-
-                orderUserViewDto.setStatus(orders.getStatus());
-
-            }
-
-        }*/
+        /*
+         * // Get All Orders using Private method getOrders List<OrderViewDto> allOrders
+         * = getOrders(orderList); // for Each loop is used for get the Order by id for
+         * (OrderViewDto orders : allOrders) { // Check the Order is Cancelled or not
+         * And Get the Order by Order id if
+         * (orders.getStatus().equals(CANCEL.getStatus()) && (orders.getOrderId() ==
+         * order.getOrderId())) { // Set the Orders details in dto to view staff
+         * orderUserViewDto.setOrderId(orders.getOrderId());
+         * orderUserViewDto.setFoodItem(orders.getFoodItem()); // Set the Order Address
+         * Details using Private method getOrderId()
+         * orderUserViewDto.setAddress(setAddress(orders.getOrderId()));
+         * orderUserViewDto.setAmount(orders.getAmount());
+         * orderUserViewDto.setStatus(orders.getStatus()); } }
+         */
 
         // Get the Cancel Order For this Order id
         OrderViewDto cancelOrder = new OrderViewDto();
-        //Get the Cancel order by Using Private Method and Stream
+        // Get the Cancel order by Using Private Method and Stream
         List<OrderViewDto> cancelOrders = getOrders(orderList).stream().filter((orderViewDto) -> {
             return orderViewDto.getStatus().equals(CANCEL.getStatus());
         }).filter((orderViewDto) -> {
@@ -730,22 +704,17 @@ public class OrderServiceImpl implements OrderService {
         // Get List of Orders for this User
         List<Order> orderList = orderRepository.findAll();
 
-/*        // Get the Completed Orders List
-        List<OrderViewDto> completedOrders = new ArrayList<>();
-        // Get All Orders using Private method getOrders
-        List<OrderViewDto> allOrders = getOrders(orderList);
-        // for Each loop is used for get the Active Orders
-        for (OrderViewDto orders : allOrders) {
-
-            // Check the Order is Active or not
-            if (orders.getStatus().equals(DELIVERED.getStatus())) {
-                // Set the Order Address Details using Private method getOrderId()
-                orders.setAddress(setAddress(orders.getOrderId()));
-                // Add the Completed Orders
-                completedOrders.add(orders);
-            }
-
-        }*/
+        /*
+         * // Get the Completed Orders List List<OrderViewDto> completedOrders = new
+         * ArrayList<>(); // Get All Orders using Private method getOrders
+         * List<OrderViewDto> allOrders = getOrders(orderList); // for Each loop is used
+         * for get the Active Orders for (OrderViewDto orders : allOrders) { // Check
+         * the Order is Active or not if
+         * (orders.getStatus().equals(DELIVERED.getStatus())) { // Set the Order Address
+         * Details using Private method getOrderId()
+         * orders.setAddress(setAddress(orders.getOrderId())); // Add the Completed
+         * Orders completedOrders.add(orders); } }
+         */
 
         // Get the Completed Orders List Using Private method and stream
         List<OrderViewDto> completedOrders = getOrders(orderList).stream()
@@ -777,31 +746,23 @@ public class OrderServiceImpl implements OrderService {
         // Get the List Of All Orders
         List<Order> orderList = orderRepository.findAll();
 
-/*        // Get The Completed Order Details
-        OrderViewDto orderUserViewDto = new OrderViewDto();
+        /*
+         * // Get The Completed Order Details OrderViewDto orderUserViewDto = new
+         * OrderViewDto(); // Get All Orders using Private method getOrders
+         * List<OrderViewDto> allOrders = getOrders(orderList); // for Each loop is used
+         * for get the Order by id for (OrderViewDto orders : allOrders) { // Check the
+         * Order is Delivered or not And Get the Order by Order id if
+         * (orders.getStatus().equals(DELIVERED.getStatus()) && (orders.getOrderId() ==
+         * order.getOrderId())) { // Set the Orders details in dto to view staff
+         * orderUserViewDto.setOrderId(orders.getOrderId());
+         * orderUserViewDto.setFoodItem(orders.getFoodItem()); // Set the Order Address
+         * Details using Private method getOrderId()
+         * orderUserViewDto.setAddress(setAddress(orders.getOrderId()));
+         * orderUserViewDto.setAmount(orders.getAmount());
+         * orderUserViewDto.setStatus(orders.getStatus()); } }
+         */
 
-        // Get All Orders using Private method getOrders
-        List<OrderViewDto> allOrders = getOrders(orderList);
-        // for Each loop is used for get the Order by id
-        for (OrderViewDto orders : allOrders) {
-
-            // Check the Order is Delivered or not And Get the Order by Order id
-            if (orders.getStatus().equals(DELIVERED.getStatus()) && (orders.getOrderId() == order.getOrderId())) {
-
-                // Set the Orders details in dto to view staff
-                orderUserViewDto.setOrderId(orders.getOrderId());
-                orderUserViewDto.setFoodItem(orders.getFoodItem());
-                // Set the Order Address Details using Private method getOrderId()
-                orderUserViewDto.setAddress(setAddress(orders.getOrderId()));
-                orderUserViewDto.setAmount(orders.getAmount());
-
-                orderUserViewDto.setStatus(orders.getStatus());
-
-            }
-
-        }*/
-
-        //Get the Completed Order by Using Private method and Stream
+        // Get the Completed Order by Using Private method and Stream
         OrderViewDto ov = new OrderViewDto();
         List<OrderViewDto> list = getOrders(orderList).stream()
                 .filter((orderViewDto -> orderViewDto.getStatus().equals(DELIVERED.getStatus())))

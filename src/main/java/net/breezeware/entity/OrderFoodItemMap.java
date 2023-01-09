@@ -1,5 +1,6 @@
 package net.breezeware.entity;
 
+import java.io.Serializable;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -16,15 +17,19 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+/**
+ * OrderFoodItemMap is represents the Order With Address,
+ * Foreign key is Order.
+ */
 @Entity
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "order_food_item_map", schema = "cafeteria_management_system")
-public class OrderFoodItemMap {
+public class OrderFoodItemMap implements Serializable {
 
     /**
-     * Primary Key Order FoodItem Map Id
+     * Primary Key Order FoodItem Map id
      */
     @Schema(example = "1", description = "Order FoodItem Map Id")
     @Id
@@ -36,7 +41,7 @@ public class OrderFoodItemMap {
     private long OrderFoodItemMapId;
 
     /**
-     * Foreign Key Order data
+     * Foreign Key Order details
      */
     @Schema(example = "4", description = "Order Id")
     @OneToOne(cascade = CascadeType.ALL)

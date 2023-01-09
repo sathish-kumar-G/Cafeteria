@@ -16,7 +16,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
- * Food Menu Entity Class
+ * Food Menu Entity Class represents the Food Menu data.
+ *
  */
 
 @Entity
@@ -54,7 +55,7 @@ public class FoodMenu implements Serializable {
     private String foodMenuType;
 
     /**
-     * Food Menu Active or NotActive
+     * Food Menu Status
      */
     @Schema(example = "active", description = "Food Menu is Active or not")
     @Column(name = "food_menu_available_date")

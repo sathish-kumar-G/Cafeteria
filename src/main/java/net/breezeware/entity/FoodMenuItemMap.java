@@ -1,5 +1,6 @@
 package net.breezeware.entity;
 
+import java.io.Serializable;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -17,7 +18,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
- * Food Menu Item Map Entity Class, This class Map the two entity.
+ * Food Menu Item Map Entity Class, This class Map the two entity(FoodMenu,FoodItem).
  */
 
 @Entity
@@ -25,10 +26,10 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "food_menu_item_map", schema = "cafeteria_management_system")
-public class FoodMenuItemMap {
+public class FoodMenuItemMap implements Serializable {
 
     /**
-     * Food Menu Item Map Id, Primary key and Unique.
+     * Food Menu Item Map id, Primary key and Unique.
      */
     @Schema(example = "1", description = "Food Menu Item Map Id")
     @Id
@@ -48,16 +49,18 @@ public class FoodMenuItemMap {
     private FoodMenu foodMenu;
 
     /**
-     * Food Item Id, Foreign key and Unique.
+     * Food Item id, Foreign key and Unique.
      */
-
     @Schema(example = "1", description = "Food Item Id")
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "food_item_id")
     private FoodItem foodItem;
 
+    /**
+     * Food Item Count.
+     */
+    @Schema(example = "10", description = "Food Item Count")
     @Column(name = "food_count")
     private long foodCount;
 
-    // private long count;
 }

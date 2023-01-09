@@ -36,8 +36,8 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.extern.slf4j.Slf4j;
 
 /**
- * Order Controller is used to User add Food Items to order. Autowired the Order
- * Service.
+ * Order Controller is used to Manage the User Orders.
+ * Autowired the Order Service.
  */
 
 @RestController
@@ -312,7 +312,7 @@ public class OrderController {
     public OrderViewDto viewtheReceivedOrderByStaff(@PathVariable(name = "staff-id") long userId,
             @PathVariable(name = "order-id") long orderId) throws CustomException {
         log.info("Entering viewtheReceivedOrderByStaff");
-        OrderViewDto receivedOrder = orderService.viewtheReceivedOrderByStaff(userId, orderId);
+        OrderViewDto receivedOrder = orderService.viewTheReceivedOrderByStaff(userId, orderId);
         log.info("Leaving viewtheReceivedOrderByStaff");
         return receivedOrder;
     }

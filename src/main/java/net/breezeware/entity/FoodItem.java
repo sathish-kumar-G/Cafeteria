@@ -1,5 +1,6 @@
 package net.breezeware.entity;
 
+import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -14,7 +15,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
- * Food Item Entity Class
+ * Food Item Entity Class,represents the Food Item data.
  */
 
 @Entity
@@ -22,10 +23,10 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "food_item", schema = "cafeteria_management_system")
-public class FoodItem {
+public class FoodItem implements Serializable {
 
     /**
-     * Food Item Id, Primary key and Unique.
+     * Food Item id, Primary key and Unique.
      */
     @Schema(example = "1", description = "Food Item Id")
     @Id
@@ -36,6 +37,7 @@ public class FoodItem {
     private long foodItemId;
 
     /**
+     *
      * Food Item Name
      */
     @Schema(example = "pizza", description = "Food Item Name")

@@ -1,5 +1,6 @@
 package net.breezeware.entity;
 
+import java.io.Serializable;
 import java.sql.Date;
 
 import javax.persistence.CascadeType;
@@ -19,8 +20,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
- * OrderAddressMap Entity is used for Add Address for the Order. Foreign key is
- * Order.
+ * OrderAddressMap Entity is used for Add Address for the Order. Foreign key is Order.
  */
 
 @Entity
@@ -28,10 +28,10 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "order_address_map", schema = "cafeteria_management_system")
-public class OrderAddressMap {
+public class OrderAddressMap implements Serializable {
 
     /**
-     * Order Address Map Id, Primary Key
+     * Order Address Map id, Primary Key
      */
     @Schema(example = "1", description = "Order Address Map Id")
     @Id
@@ -43,7 +43,7 @@ public class OrderAddressMap {
     private long orderAddressMapId;
 
     /**
-     * Order Table, Foreign Key
+     * Order, Foreign Key
      */
     @Schema(example = "1", description = "Order Id")
     @OneToOne(cascade = CascadeType.ALL)

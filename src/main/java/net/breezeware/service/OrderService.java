@@ -11,126 +11,130 @@ import net.breezeware.entity.Order;
 import net.breezeware.entity.OrderAddressMap;
 import net.breezeware.exception.CustomException;
 
+/**
+ * OrderServiceImpl implements OrderService Interface.
+ */
 public interface OrderService {
 
     /**
-     * User Add Food items to the Order
-     * @param  orderDto        Dto class used for add Food Items to the Order
-     * @return                 Order
-     * @throws CustomException throws Food item is not available
+     * User Add Food items to the Order.
+     * @param  orderDto        this detail is used for add Food Items to the Order
+     * @param  userId          this id is used to find the user.
+     * @return                 Order details.
+     * @throws CustomException if Food item or user is not available.
      */
     Order addFoodItemsToOrder(@Valid OrderDto orderDto, long userId) throws CustomException;
 
     /**
-     * View the All User Order for this User
-     * @param  userId          to get All Orders for this user id
-     * @return
-     * @throws CustomException if User is not Found
+     * View all the Order details for this User.
+     * @param  userId          this id is used to find the user.
+     * @return                 all order details.
+     * @throws CustomException if User is not Found.
      */
     List<OrderViewDto> viewUserOrder(long userId) throws CustomException;
 
     /**
-     * Update the Order By User Id
-     * @param  orderUpdateDto  Set and Get the Updated Food Items in the Order
-     * @param  userId          find the User
-     * @param  orderId         find the Order
-     * @return
-     * @throws CustomException throws if user/order/foodItem is not Available
+     * Update the Order By User using Order id.
+     * @param  orderUpdateDto  Update the Food Items in the Order.
+     * @param  userId          this id is used to find the user.
+     * @param  orderId         this id is used to find the order details.
+     * @return     Updated order details.
+     * @throws CustomException if Order, Food item or user is not available.
      */
     OrderUpdateDto updateTheOrderByUserId(OrderUpdateDto orderUpdateDto, long userId, long orderId)
             throws CustomException;
 
     /**
-     * Place an Order by User
-     * @param  orderAddressMap Store the data in Order Address Map table
-     * @param  userId          find the User
-     * @param  orderId         find the Order
-     * @return
-     * @throws CustomException throw if User/Order not Found
+     * Place an Order by User.
+     * @param  orderAddressMap Sets the Address Details in the Order.
+     * @param  userId          this id is used to find the user.
+     * @param  orderId         this id is used to find the order details.
+     * @return                 Order with Address Details.
+     * @throws CustomException if Order or user is not available.
      */
     OrderAddressMap placeAnOrderByUser(OrderAddressMap orderAddressMap, long userId, long orderId)
             throws CustomException;
 
     /**
-     * Cancel the Order by User
-     * @param  userId          find the User
-     * @param  orderId         find the Order
-     * @throws CustomException throw if User/Order not Found
+     * Cancel the Placed order by User.
+     * @param  userId          this id is used to find the user.
+     * @param  orderId         this id is used to find the order details.
+     * @throws CustomException if Order or user is not available.
      */
     void cancelTheOrderByUser(long userId, long orderId) throws CustomException;
 
     /**
-     * Get the List of Active Orders by Staff
-     * @param  userId          find the Staff
-     * @return
-     * @throws CustomException throw if Staff is not Found
+     * Gets the List of Active placed orders by Staff.
+     * @param  userId         this id is used to find the staff.
+     * @return                List of Active placed orders.
+     * @throws CustomException if Staff is not Found.
      */
     List<OrderViewDto> getTheListOfActiveOrdersByStaff(long userId) throws CustomException;
 
     /**
-     * View the Received Order By Staff
-     * @param  userId          find the Staff
-     * @param  orderId         find the Order
-     * @return
-     * @throws CustomException if User/Order not Found
+     * Get the Received Order By Staff.
+     * @param  userId          this id is used to find the staff.
+     * @param  orderId         this id is used to find the order details.
+     * @return                 received order.
+     * @throws CustomException if Order or staff is not available.
      */
-    OrderViewDto viewtheReceivedOrderByStaff(long userId, long orderId) throws CustomException;
+    OrderViewDto viewTheReceivedOrderByStaff(long userId, long orderId) throws CustomException;
 
     /**
-     * Update the Order Status to Prepared Order by Staff
-     * @param  userId          find the Staff
-     * @param  orderId         find the Order
-     * @throws CustomException if User/Order not Found
+     * Update the Order Status to Prepared Order by Staff.
+     * @param  userId          this id is used to find the staff.
+     * @param  orderId         this id is used to find the order details.
+     * @throws CustomException if Order or staff is not available.
      */
     void updateTheOrderStatusToOrderPreparedByStaff(long userId, long orderId) throws CustomException;
 
     /**
      * Update the Order Status to Delivery Pending by Staff
-     * @param  userId          find the Staff
-     * @param  orderId         find the Order
-     * @throws CustomException if User/Order not Found
+     * @param  userId          this id is used to find the staff.
+     * @param  orderId         this id is used to find the order details.
+     * @throws CustomException if Order or staff is not available.
      */
     void updateTheOrderStatusToPendingDeliveryByStaff(long userId, long orderId) throws CustomException;
 
     /**
-     * Update the Order Status to Order Delivered by Staff
-     * @param  userId          find the Staff
-     * @param  orderId         find the Order
-     * @throws CustomException if User/Order not Found
+     * Update the Order Status to Order Delivered by Staff.
+     * @param  userId          this id is used to find the staff.
+     * @param  orderId         this id is used to find the order details.
+     * @throws CustomException if Order or staff is not available.
      */
     void updateTheOrderStatusToOrderDeliveredByStaff(long userId, long orderId) throws CustomException;
 
     /**
-     * View List of Cancelled Order by Staff
-     * @param  userId          find the Staff
-     * @return
-     * @throws CustomException if User/Order not Found
+     * Gets List of Cancelled Order by Staff.
+     * @param  userId          this id is used to find the staff.
+     * @return                 List of Cancelled Orders.
+     * @throws CustomException if staff is not Found.
      */
     List<OrderViewDto> viewListOfCancelOrdersByStaff(long userId) throws CustomException;
 
     /**
-     * View the Cancel Order by Staff using Order Id
-     * @param  userId          find the Staff
-     * @param  orderId         find the Order
-     * @return                 Cancel Order
-     * @throws CustomException if User/Order not Found
+     * Get the Cancel Order by Staff using Order id.
+     * @param  userId          this id is used to find the staff.
+     * @param  orderId         this id is used to find the order details.
+     * @return                 Cancel Order.
+     * @throws CustomException if Order or staff is not available.
      */
     OrderViewDto viewCancelOrderByStaff(long userId, long orderId) throws CustomException;
 
     /**
-     * View List of Completed Orders by Staff
-     * @param  userId          find the Staff
-     * @return                 Completed Orders
-     * @throws CustomException if User/Order not Found
+     * Gets List of Completed Orders by Staff.
+     * @param  userId          this id is used to find the staff.
+     * @return                 List of Completed Orders.
+     * @throws CustomException if staff is not available.
      */
     List<OrderViewDto> viewListOfCompletedOrdersByStaff(long userId) throws CustomException;
 
     /**
-     * View the Completed Order by Staff using Order Id
-     * @param  userId          find the Staff
-     * @param  orderId         find the Order
-     * @return                 Completed Order
-     * @throws CustomException if User/Order not Found
+     * Get the Completed Order by Staff using Order id.
+     * @param  userId         this id is used to find the staff.
+     * @param  orderId        this id is used to find the order details.
+     * @return                 Completed Order.
+     * @throws CustomException if Order or staff is not available.
      */
     OrderViewDto viewCompletedOrderByStaff(long userId, long orderId) throws CustomException;
 

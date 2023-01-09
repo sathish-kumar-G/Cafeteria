@@ -27,6 +27,9 @@ import net.breezeware.repository.FoodMenuRepository;
 import net.breezeware.repository.UserRepository;
 import net.breezeware.repository.UserRoleMapRepository;
 
+/**
+ * FoodMenuServiceImpl class is used to write the Business logic.
+ */
 @Service
 public class FoodMenuServiceImpl implements FoodMenuService {
 
@@ -47,7 +50,6 @@ public class FoodMenuServiceImpl implements FoodMenuService {
 
     /**
      * {@inheritDoc}
-     * @return
      */
     @Override
     public FoodMenu createFoodMenu(@Valid FoodMenuDto foodMenuDto, long userId) throws CustomException {
@@ -282,8 +284,11 @@ public class FoodMenuServiceImpl implements FoodMenuService {
 
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
-    public List<FoodMenuViewUserDto> getAllActiveFoodMenu(long userId) throws CustomException {
+    public List<FoodMenuViewUserDto> viewAllActiveFoodMenuByUser(long userId) throws CustomException {
 
         // User Access Checked using Private Method
         customerAccessChecking(userId);

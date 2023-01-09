@@ -34,7 +34,7 @@ public class GlobalException extends ResponseEntityExceptionHandler {
     }
 
     /**
-     * @param  NullPointerException throw the Exception message and status
+     * @param  nullPointerException throw the Exception message and status
      * @return                      shown a list of Error messages.
      */
     @ExceptionHandler(NullPointerException.class)
@@ -48,7 +48,7 @@ public class GlobalException extends ResponseEntityExceptionHandler {
     }
 
     /**
-     * @param  NullPointerException throw the Exception message and status
+     * @param  noSuchElementException throw the Exception message and status
      * @return                      shown a list of Error messages.
      */
     @ExceptionHandler(NoSuchElementException.class)

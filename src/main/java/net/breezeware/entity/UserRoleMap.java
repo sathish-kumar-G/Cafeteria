@@ -1,5 +1,6 @@
 package net.breezeware.entity;
 
+import java.io.Serializable;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -16,7 +17,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
- * User Role Map Entity Class, This class Map the two entity.
+ * User Role Map Entity Class, This class Map the two entity(User,Role).
  */
 
 @Entity
@@ -24,10 +25,10 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Data
 @Table(name = "user_role_map", schema = "cafeteria_management_system")
-public class UserRoleMap {
+public class UserRoleMap implements Serializable {
 
     /**
-     * User Role Map Id, Primary key and Unique.
+     * User Role Map id, Primary key and Unique.
      */
     @Schema(example = "1", description = "User Role Map Id")
     @Id

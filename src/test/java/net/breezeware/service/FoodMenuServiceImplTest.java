@@ -218,7 +218,7 @@ class FoodMenuServiceImplTest {
 
         List<FoodMenuViewUserDto> foodMenuViewUserDtos = new ArrayList<>();
 
-        List<FoodMenuViewUserDto> actual = service.getAllActiveFoodMenu(user.getUserId());
+        List<FoodMenuViewUserDto> actual = service.viewAllActiveFoodMenuByUser(user.getUserId());
         assertEquals(foodMenuViewUserDtos, actual);
     }
 }

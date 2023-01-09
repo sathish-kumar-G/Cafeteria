@@ -27,7 +27,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 
 /**
  * Food Item Controller is used for create, view, update and delete the Food
- * item. Auto wired this FoodItemController to FooditemService Interface.
+ * item by Admin. Auto wired this FoodItemController to FoodItemService Interface.
  */
 
 @RestController
@@ -40,6 +40,13 @@ public class FoodItemController {
     private FoodItemService foodItemService;
 
     // Create New Food Items
+    /**
+     * Create the new Food Item by Admin.
+     * @param  foodItem        this foodItem data is to be created.
+     * @param  userId          this id is used to find the Admin.
+     * @return                 Created new Food Item.
+     * @throws CustomException if foodItem is null or conflict value.
+     */
     @PostMapping("user/{admin-id}/food-item")
     @Operation(method = "POST", summary = "Create the Food Item", description = "Create the Food Item")
     @io.swagger.v3.oas.annotations.parameters.RequestBody(
@@ -76,6 +83,11 @@ public class FoodItemController {
     }
 
     // View All Food Items
+    /**
+     * Gets all the foodItem by Admin.
+     * @param  userId this id is used to find the Admin.
+     * @return        All the Food items.
+     */
     @GetMapping("user/{admin-id}/food-items")
     @Operation(method = "GET", summary = "Get the Food Items", description = "Get the Food Items")
     @Parameters(value = { @Parameter(allowEmptyValue = false, required = true, name = "userId",
@@ -108,7 +120,15 @@ public class FoodItemController {
         return allFoodItem;
     }
 
-    // Update the Food Item By Id
+    // Update the Food Item By id
+    /**
+     * Update the Food Item by admin.
+     * @param  foodItem        update the foodItem data.
+     * @param  foodItemId      this id is used to find the foodItem.
+     * @param  userId          this id is used to find the Admin.
+     * @return                 the updated Food item.
+     * @throws CustomException if foodItem or Admin is not found.
+     */
     @PutMapping("user/{admin-id}/food-item/{food-item-id}")
     @Operation(method = "PUT", summary = "Update the Food Item", description = "Update the Food Item")
     @io.swagger.v3.oas.annotations.parameters.RequestBody(
@@ -150,6 +170,12 @@ public class FoodItemController {
     }
 
     // Delete the Food Item
+    /**
+     * Delete the Food Item by Admin
+     * @param  foodItemId      this id is used to find the foodItem.
+     * @param  userId          this id is used to find the Admin.
+     * @throws CustomException if foodItem or Admin is not found.
+     */
     @DeleteMapping("user/{admin-id}/food-item/{food-item-id}")
     @Operation(method = "DELETE", summary = "Delete the Food Item.", description = "Delete the Food Item.")
     @Parameters(value = {
