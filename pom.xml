@@ -18,7 +18,7 @@
         <java.version>17</java.version>
     </properties>
 
-    <!-- Dynamo-sdk-bom Version Manage -->
+    <!-- Dynamo-sdk-bom Version Manage Dependency-->
     <dependencyManagement>
         <dependencies>
             <dependency>
