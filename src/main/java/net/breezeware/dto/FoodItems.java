@@ -12,19 +12,19 @@ import io.swagger.v3.oas.annotations.media.Schema;
 public class FoodItems {
 
     /**
-     * Food Item id
+     * Food Item id.
      */
     @Schema(example = "1", description = "Food Item Id")
     private long foodItemId;
 
     /**
-     * Food Item Price
+     * Food Item Price.
      */
     @Schema(example = "144", description = "Food Item Price")
     private long foodPrice;
 
     /**
-     * Food Item Count
+     * Food Item Count.
      */
     @Schema(example = "12", description = "Food Item Count")
     private long foodItemCount;

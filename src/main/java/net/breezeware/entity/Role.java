@@ -25,7 +25,7 @@ import lombok.NoArgsConstructor;
 public class Role implements Serializable {
 
     /**
-     * Role id, It is Primary Key
+     * Role id, It is Primary Key.
      */
     @Schema(example = "1", description = "Role Id")
     @Id
@@ -36,14 +36,14 @@ public class Role implements Serializable {
     private long roleId;
 
     /**
-     * Role Name of the user
+     * Role Name of the user.
      */
     @Schema(example = "customer", description = "Role Name")
     @Column(name = "role_name")
     private String roleName;
 
     /**
-     * Role Description of the User
+     * Role Description of the User.
      */
     @Schema(example = "user role", description = "Role Description")
     @Column(name = "role_desc")

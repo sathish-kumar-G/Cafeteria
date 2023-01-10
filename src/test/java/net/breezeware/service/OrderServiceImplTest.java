@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import net.breezeware.dynamo.utils.exception.DynamoException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -78,7 +79,7 @@ public class OrderServiceImplTest {
 
     // Before Each init method for create instance for every test case
     @BeforeEach
-    void setupInit() throws CustomException {
+    void setupInit() throws DynamoException {
         order = new Order();
         user = new User();
         foodItem = new FoodItem();
@@ -89,7 +90,7 @@ public class OrderServiceImplTest {
     // Test for Add Food Items to the Order
     @Test
     @DisplayName("Add Food Items to the Order Test case")
-    void testAddFoodItemsToOrder() throws CustomException {
+    void testAddFoodItemsToOrder() throws DynamoException {
 
         // Customer Access Checking case by private method
         customerAccessChecking(user);
@@ -126,7 +127,7 @@ public class OrderServiceImplTest {
     // View User Orders By User Id Test case
     @Test
     @DisplayName("View User Orders Test Case")
-    void testViewUserOrder() throws CustomException {
+    void testViewUserOrder() throws DynamoException {
 
         // Customer Access Checking case by private method
         customerAccessChecking(user);
@@ -154,7 +155,7 @@ public class OrderServiceImplTest {
     // Update the Order by User Test case
     @Test
     @DisplayName("Update the Order by User Test case")
-    void testUpdateTheOrderByUserId() throws CustomException {
+    void testUpdateTheOrderByUserId() throws DynamoException {
 
         // Customer Access And Order case using Private Method
         customerAndOrderChecking(user, order);
@@ -194,7 +195,7 @@ public class OrderServiceImplTest {
 
     @Test
     @DisplayName("Place an Order By User Test case")
-    void testPlaceAnOrderByUser() throws CustomException {
+    void testPlaceAnOrderByUser() throws DynamoException {
 
         // Customer Access And Order case using Private Method
         customerAndOrderChecking(user, order);
@@ -218,8 +219,8 @@ public class OrderServiceImplTest {
     // Exception Test case
     @Test
     @DisplayName("Exception Test case Null Value Occure in testPlaceAnOrderByUser case")
-    void testPlaceAnOrderByUser_withNullInput_throwsCustomException() throws CustomException {
-        assertThrows(CustomException.class, () -> {
+    void testPlaceAnOrderByUser_withNullInput_throwsCustomException() throws DynamoException {
+        assertThrows(DynamoException.class, () -> {
             orderService.placeAnOrderByUser(null, 1, 1);
         });
     }
@@ -227,7 +228,7 @@ public class OrderServiceImplTest {
     // View All Active Orders by Staff
     @Test
     @DisplayName("View All Active Orders By Staff Test case")
-    void testGetTheListOfActiveOrdersByStaff() throws CustomException {
+    void testGetTheListOfActiveOrdersByStaff() throws DynamoException {
 
         // Staff Access case using private Method
         staffAccessChecking(user);
@@ -254,7 +255,7 @@ public class OrderServiceImplTest {
     // Staff view the Received Order By Id
     @Test
     @DisplayName("Staff view the Received Order By Id Test case")
-    void testViewtheReceivedOrderByStaff() throws CustomException {
+    void testViewtheReceivedOrderByStaff() throws DynamoException {
 
         // Staff Access case using private Method
         staffAccessChecking(user);
@@ -282,7 +283,7 @@ public class OrderServiceImplTest {
     // View List Of Cancelled Orders by Staff Test case
     @Test
     @DisplayName("View List of Cancel Orders By Staff case")
-    void testViewListOfCancelOrdersByStaff() throws CustomException {
+    void testViewListOfCancelOrdersByStaff() throws DynamoException {
 
         // Staff Access case using private Method
         staffAccessChecking(user);
@@ -309,7 +310,7 @@ public class OrderServiceImplTest {
     // View the Cancel Order by Staff using Order Id Test case
     @Test
     @DisplayName("View the Cancel Order by Staff Test case")
-    void testViewCancelOrderByStaff() throws CustomException {
+    void testViewCancelOrderByStaff() throws DynamoException {
 
         // Staff Access case using private Method
         staffAccessChecking(user);
@@ -335,7 +336,7 @@ public class OrderServiceImplTest {
     // View List Of Completed Orders By Staff Test case
     @Test
     @DisplayName("View List of Completed Orders by Staff")
-    void testViewListOfCompletedOrdersByStaff() throws CustomException {
+    void testViewListOfCompletedOrdersByStaff() throws DynamoException {
 
         // Staff Access case using private Method
         staffAccessChecking(user);
@@ -361,7 +362,7 @@ public class OrderServiceImplTest {
     // View Completed Order by Staff using Order Id case
     @Test
     @DisplayName("View Completed Order Test case")
-    void testViewCompletedOrderByStaff() throws CustomException {
+    void testViewCompletedOrderByStaff() throws DynamoException {
 
         // Staff Access case using private Method
         staffAccessChecking(user);

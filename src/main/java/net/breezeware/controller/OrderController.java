@@ -6,23 +6,18 @@ import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import net.breezeware.dto.OrderDto;
 import net.breezeware.dto.OrderUpdateDto;
 import net.breezeware.dto.OrderViewDto;
+import net.breezeware.dynamo.utils.exception.DynamoException;
 import net.breezeware.entity.Order;
 import net.breezeware.entity.OrderAddressMap;
-import net.breezeware.exception.CustomException;
 import net.breezeware.exception.ErrorResponse;
 import net.breezeware.service.OrderService;
+
+import lombok.extern.slf4j.Slf4j;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -33,11 +28,10 @@ import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
-import lombok.extern.slf4j.Slf4j;
 
 /**
- * Order Controller is used to Manage the User Orders.
- * Autowired the Order Service.
+ * Order Controller is used to Manage the User Orders. Autowired the Order
+ * Service.
  */
 
 @RestController
@@ -76,7 +70,7 @@ public class OrderController {
                 examples = { @ExampleObject(name = "Error-415",
                         value = "{\"statusCode\":\"415\",\"message\":\"Unsupported Media Type\",\"details\":\"Please Enter Correct Value\"}") })) })
     public Order addFoodItemsToOrder(@Valid @RequestBody OrderDto orderDto, @PathVariable(name = "user-id") long userId)
-            throws CustomException {
+            throws DynamoException {
         log.info("Entering addFoodItemsToOrder");
         Order saveOrder = orderService.addFoodItemsToOrder(orderDto, userId);
         log.info("Leaving addFoodItemsToOrder");
@@ -111,7 +105,7 @@ public class OrderController {
                 mediaType = "application.json", schema = @Schema(implementation = ErrorResponse.class),
                 examples = { @ExampleObject(name = "Error-415",
                         value = "{\"statusCode\":\"415\",\"message\":\"Unsupported Media Type\",\"details\":\"Please Enter Correct Value\"}") })) })
-    public List<OrderViewDto> viewAllUserOrder(@PathVariable(name = "user-id") long userId) throws CustomException {
+    public List<OrderViewDto> viewAllUserOrder(@PathVariable(name = "user-id") long userId) throws DynamoException {
         log.info("Entering viewAllUserOrder");
         List<OrderViewDto> viewAllOrder = orderService.viewUserOrder(userId);
         log.info("Leaving viewAllUserOrder");
@@ -154,7 +148,7 @@ public class OrderController {
                         value = "{\"statusCode\":\"415\",\"message\":\"Unsupported Media Type\",\"details\":\"Please Enter Correct Value\"}") })) })
     public OrderUpdateDto updateTheOrderByUserId(@RequestBody OrderUpdateDto orderUpdateDto,
             @PathVariable(name = "user-id") long userId, @PathVariable(name = "order-id") long orderId)
-            throws CustomException {
+            throws DynamoException {
         log.info("Entering updateTheOrderByUserId");
         OrderUpdateDto orderUpdate = orderService.updateTheOrderByUserId(orderUpdateDto, userId, orderId);
         log.info("Leaving updateTheOrderByUserId");
@@ -196,7 +190,7 @@ public class OrderController {
                         value = "{\"statusCode\":\"415\",\"message\":\"Unsupported Media Type\",\"details\":\"Please Enter Correct Value\"}") })) })
     public OrderAddressMap placeAnOrderByUser(@RequestBody OrderAddressMap orderAddressMap,
             @PathVariable(name = "user-id") long userId, @PathVariable(name = "order-id") long orderId)
-            throws CustomException {
+            throws DynamoException {
 
         log.info("Entering placeAnOrderByUser");
         OrderAddressMap placeOrder = orderService.placeAnOrderByUser(orderAddressMap, userId, orderId);
@@ -235,7 +229,7 @@ public class OrderController {
                 examples = { @ExampleObject(name = "Error-415",
                         value = "{\"statusCode\":\"415\",\"message\":\"Unsupported Media Type\",\"details\":\"Please Enter Correct Value\"}") })) })
     public String cancelTheOrderByUser(@PathVariable(name = "user-id") long userId,
-            @PathVariable(name = "order-id") long orderId) throws CustomException {
+            @PathVariable(name = "order-id") long orderId) throws DynamoException {
         log.info("Entering cancelTheOrderByUser");
         orderService.cancelTheOrderByUser(userId, orderId);
         log.info("Leaving cancelTheOrderByUser");
@@ -271,7 +265,7 @@ public class OrderController {
                 examples = { @ExampleObject(name = "Error-415",
                         value = "{\"statusCode\":\"415\",\"message\":\"Unsupported Media Type\",\"details\":\"Please Enter Correct Value\"}") })) })
     public List<OrderViewDto> getTheListOfActiveOrdersByStaff(@PathVariable(name = "staff-id") long userId)
-            throws CustomException {
+            throws DynamoException {
         log.info("Entering getTheListOfActiveOrdersByStaff");
         List<OrderViewDto> activeOrders = orderService.getTheListOfActiveOrdersByStaff(userId);
         log.info("Leaving getTheListOfActiveOrdersByStaff");
@@ -310,7 +304,7 @@ public class OrderController {
                 examples = { @ExampleObject(name = "Error-415",
                         value = "{\"statusCode\":\"415\",\"message\":\"Unsupported Media Type\",\"details\":\"Please Enter Correct Value\"}") })) })
     public OrderViewDto viewtheReceivedOrderByStaff(@PathVariable(name = "staff-id") long userId,
-            @PathVariable(name = "order-id") long orderId) throws CustomException {
+            @PathVariable(name = "order-id") long orderId) throws DynamoException {
         log.info("Entering viewtheReceivedOrderByStaff");
         OrderViewDto receivedOrder = orderService.viewTheReceivedOrderByStaff(userId, orderId);
         log.info("Leaving viewtheReceivedOrderByStaff");
@@ -349,7 +343,7 @@ public class OrderController {
                 examples = { @ExampleObject(name = "Error-415",
                         value = "{\"statusCode\":\"415\",\"message\":\"Unsupported Media Type\",\"details\":\"Please Enter Correct Value\"}") })) })
     public String updateTheOrderStatusToOrderPreparedByStaff(@PathVariable(name = "staff-id") long userId,
-            @PathVariable(name = "order-id") long orderId) throws CustomException {
+            @PathVariable(name = "order-id") long orderId) throws DynamoException {
         log.info("Entering updateTheOrderStatusToOrderPreparedByStaff");
         orderService.updateTheOrderStatusToOrderPreparedByStaff(userId, orderId);
         log.info("Leaving updateTheOrderStatusToOrderPreparedByStaff");
@@ -388,7 +382,7 @@ public class OrderController {
                 examples = { @ExampleObject(name = "Error-415",
                         value = "{\"statusCode\":\"415\",\"message\":\"Unsupported Media Type\",\"details\":\"Please Enter Correct Value\"}") })) })
     public String updateTheOrderStatusToPendingDeliveryByStaff(@PathVariable(name = "staff-id") long userId,
-            @PathVariable(name = "order-id") long orderId) throws CustomException {
+            @PathVariable(name = "order-id") long orderId) throws DynamoException {
         log.info("Entering updateTheOrderStatusToPendingDeliveryByStaff");
         orderService.updateTheOrderStatusToPendingDeliveryByStaff(userId, orderId);
         log.info("Leaving updateTheOrderStatusToPendingDeliveryByStaff");
@@ -427,7 +421,7 @@ public class OrderController {
                 examples = { @ExampleObject(name = "Error-415",
                         value = "{\"statusCode\":\"415\",\"message\":\"Unsupported Media Type\",\"details\":\"Please Enter Correct Value\"}") })) })
     public String updateTheOrderStatusToOrderDeliveredByStaff(@PathVariable(name = "staff-id") long userId,
-            @PathVariable(name = "order-id") long orderId) throws CustomException {
+            @PathVariable(name = "order-id") long orderId) throws DynamoException {
         log.info("Entering updateTheOrderStatusToOrderDeliveredByStaff");
         orderService.updateTheOrderStatusToOrderDeliveredByStaff(userId, orderId);
         log.info("Leaving updateTheOrderStatusToOrderDeliveredByStaff");
@@ -463,7 +457,7 @@ public class OrderController {
                 examples = { @ExampleObject(name = "Error-415",
                         value = "{\"statusCode\":\"415\",\"message\":\"Unsupported Media Type\",\"details\":\"Please Enter Correct Value\"}") })) })
     public List<OrderViewDto> viewListOfCancelOrdersByStaff(@PathVariable(name = "staff-id") long userId)
-            throws CustomException {
+            throws DynamoException {
         log.info("Entering viewListOfCancelOrdersByStaff");
         List<OrderViewDto> cancelOrders = orderService.viewListOfCancelOrdersByStaff(userId);
         log.info("Leaving viewListOfCancelOrdersByStaff");
@@ -502,7 +496,7 @@ public class OrderController {
                 examples = { @ExampleObject(name = "Error-415",
                         value = "{\"statusCode\":\"415\",\"message\":\"Unsupported Media Type\",\"details\":\"Please Enter Correct Value\"}") })) })
     public OrderViewDto viewCancelOrderByStaff(@PathVariable(name = "staff-id") long userId,
-            @PathVariable(name = "order-id") long orderId) throws CustomException {
+            @PathVariable(name = "order-id") long orderId) throws DynamoException {
         log.info("Entering viewCancelOrderByStaff");
         OrderViewDto cancelOrder = orderService.viewCancelOrderByStaff(userId, orderId);
         log.info("Leaving viewCancelOrderByStaff");
@@ -538,7 +532,7 @@ public class OrderController {
                 examples = { @ExampleObject(name = "Error-415",
                         value = "{\"statusCode\":\"415\",\"message\":\"Unsupported Media Type\",\"details\":\"Please Enter Correct Value\"}") })) })
     public List<OrderViewDto> viewListOfCompletedOrdersByStaff(@PathVariable(name = "staff-id") long userId)
-            throws CustomException {
+            throws DynamoException {
         log.info("Entering viewListOfCompletedOrdersByStaff");
         List<OrderViewDto> completedOrders = orderService.viewListOfCompletedOrdersByStaff(userId);
         log.info("Leaving viewListOfCompletedOrdersByStaff");
@@ -577,7 +571,7 @@ public class OrderController {
                 examples = { @ExampleObject(name = "Error-415",
                         value = "{\"statusCode\":\"415\",\"message\":\"Unsupported Media Type\",\"details\":\"Please Enter Correct Value\"}") })) })
     public OrderViewDto viewCompletedOrderByStaff(@PathVariable(name = "staff-id") long userId,
-            @PathVariable(name = "order-id") long orderId) throws CustomException {
+            @PathVariable(name = "order-id") long orderId) throws DynamoException {
         log.info("Entering viewCompletedOrderByStaff");
         OrderViewDto completedOrder = orderService.viewCompletedOrderByStaff(userId, orderId);
         log.info("Leaving viewCompletedOrderByStaff");

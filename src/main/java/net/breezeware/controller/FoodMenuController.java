@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.validation.Valid;
 
+import net.breezeware.dynamo.utils.exception.DynamoException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -48,7 +49,7 @@ public class FoodMenuController {
      * @param  foodMenu        Food Menu with Food Items details.
      * @param  userId          this id is used to find the admin.
      * @return                 Created new Food menu with Food Items.
-     * @throws CustomException if food menu details null or conflict.
+     * @throws DynamoException if food menu details null or conflict.
      */
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping("/user/{admin-id}/food-menu")
@@ -79,7 +80,7 @@ public class FoodMenuController {
                 examples = { @ExampleObject(name = "Error-415",
                         value = "{\"statusCode\":\"415\",\"message\":\"Unsupported Media Type\",\"details\":\"Please Enter Correct Value\"}") })) })
     public FoodMenu createFoodMenu(@Valid @RequestBody FoodMenuDto foodMenu,
-            @PathVariable(name = "admin-id") long userId) throws CustomException {
+            @PathVariable(name = "admin-id") long userId) throws DynamoException {
         log.info("Entering createFoodMenu {}", foodMenu);
         FoodMenu saveFoodMenu = foodMenuService.createFoodMenu(foodMenu, userId);
         log.info("Leaving createFoodMenu");
@@ -93,7 +94,7 @@ public class FoodMenuController {
      * @param  foodMenuId      this id is used to fins the foodMenu
      * @param  userId          this id is used to find the admin.
      * @return                 the Food Menu with Food Items
-     * @throws CustomException if foodMenu or Admin is not found.
+     * @throws DynamoException if foodMenu or Admin is not found.
      */
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping("/user/{admin-id}/food-menu/{food-menu-id}")
@@ -126,7 +127,7 @@ public class FoodMenuController {
                 examples = { @ExampleObject(name = "Error-415",
                         value = "{\"statusCode\":\"415\",\"message\":\"Unsupported Media Type\",\"details\":\"Please Enter Correct Value\"}") })) })
     public FoodMenuViewDto viewFoodMenuById(@PathVariable(name = "food-menu-id") long foodMenuId,
-            @PathVariable(name = "admin-id") long userId) throws CustomException {
+            @PathVariable(name = "admin-id") long userId) throws DynamoException {
         log.info("Entering View {}", foodMenuId);
         FoodMenuViewDto viewFoodMenu = foodMenuService.getFoodMenuById(foodMenuId, userId);
         log.info("Releaving viewAllFoodMenu {}", foodMenuId);
@@ -140,7 +141,7 @@ public class FoodMenuController {
      * @param  foodMenuId        this id is used to fins the foodMenu.
      * @param  userId            this id is used to find the admin.
      * @return                   Updated Food menu with Food Items.
-     * @throws CustomException   if foodMenu or Admin is not found.
+     * @throws DynamoException   if foodMenu or Admin is not found.
      */
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PutMapping("/user/{admin-id}/food-menu/{food-menu-id}")
@@ -176,7 +177,7 @@ public class FoodMenuController {
                         value = "{\"statusCode\":\"415\",\"message\":\"Unsupported Media Type\",\"details\":\"Please Enter Correct Value\"}") })) })
     public FoodMenuUpdateDto updateFoodMenuById(@RequestBody FoodMenuUpdateDto foodMenuUpdateDto,
             @PathVariable(name = "food-menu-id") long foodMenuId, @PathVariable(name = "admin-id") long userId)
-            throws CustomException {
+            throws DynamoException {
         log.info("Entering updateFoodMenuById");
         FoodMenuUpdateDto updateFoodMenu = foodMenuService.updateFoodMenu(foodMenuUpdateDto, foodMenuId, userId);
         log.info("Releaving updateFoodMenuById");
@@ -189,7 +190,7 @@ public class FoodMenuController {
      * Delete the Food Menu with Food Items by Admin.
      * @param  foodMenuId      this id is used to fins the foodMenu.
      * @param  userId          this id is used to find the admin.
-     * @throws CustomException if foodMenu or Admin is not found.
+     * @throws DynamoException if foodMenu or Admin is not found.
      */
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @DeleteMapping("/user/{admin-id}/food-menu/{food-menu-id}")
@@ -221,7 +222,7 @@ public class FoodMenuController {
                 examples = { @ExampleObject(name = "Error-415",
                         value = "{\"statusCode\":\"415\",\"message\":\"Unsupported Media Type\",\"details\":\"Please Enter Correct Value\"}") })) })
     public void deleteFoodMenuById(@PathVariable(name = "food-menu-id") long foodMenuId,
-            @PathVariable(name = "admin-id") long userId) throws CustomException {
+            @PathVariable(name = "admin-id") long userId) throws DynamoException {
         log.info("Leaving deleteFoodMenuById");
         foodMenuService.deleteFoodMenuById(foodMenuId, userId);
     }
@@ -231,7 +232,7 @@ public class FoodMenuController {
      * Gets the all Active Food Menu with Food Items by User.
      * @param  userId          this id is used to find the user.
      * @return                 All the Active Food Menu with Food Items.
-     * @throws CustomException if foodMenu or User is not found.
+     * @throws DynamoException if foodMenu or User is not found.
      */
     @PreAuthorize("hasRole('ROLE_USER')")
     @GetMapping("/user/{user-id}/food-menus")
@@ -261,7 +262,7 @@ public class FoodMenuController {
                 examples = { @ExampleObject(name = "Error-415",
                         value = "{\"statusCode\":\"415\",\"message\":\"Unsupported Media Type\",\"details\":\"Please Enter Correct Value\"}") })) })
     public List<FoodMenuViewUserDto> viewAllActiveFoodMenuByUser(@PathVariable(name = "user-id") long userId)
-            throws CustomException {
+            throws DynamoException {
         log.info("Entering viewAllActiveFoodMenu");
         List<FoodMenuViewUserDto> findFoodMenu = foodMenuService.viewAllActiveFoodMenuByUser(userId);
         log.info("Leaving viewAllActiveFoodMenu");

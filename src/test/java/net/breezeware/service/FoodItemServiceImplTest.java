@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import net.breezeware.dynamo.utils.exception.DynamoException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -57,7 +58,7 @@ class FoodItemServiceImplTest {
     // Create Food Item Test
     @Test
     @DisplayName("create Food item Test")
-    void testCreateFoodItem() throws CustomException {
+    void testCreateFoodItem() throws DynamoException {
 
         // Admin Access Checking using Private Method
         adminAccessChecking(user.getUserId());
@@ -77,12 +78,12 @@ class FoodItemServiceImplTest {
     // create food item Exception Test case
     @Test
     @DisplayName("create food item exception test")
-    void testCreateFoodItem_nullPointerExceptionTest() {
+    void testCreateFoodItem_dynamoExceptionTest() {
 
         foodItem.setFoodName("");
         foodItem.setFoodPrice(100);
 
-        assertThrows(CustomException.class, () -> {
+        assertThrows(DynamoException.class, () -> {
             service.createFoodItem(foodItem, anyLong());
         });
 
@@ -91,7 +92,7 @@ class FoodItemServiceImplTest {
     // view All Food Item Test case
     @Test
     @DisplayName("View All Food Items")
-    void testViewAllFoodItems() throws CustomException {
+    void testViewAllFoodItems() throws DynamoException {
 
         // Admin Access Checking using Private Method
         adminAccessChecking(user.getUserId());
@@ -110,7 +111,7 @@ class FoodItemServiceImplTest {
     // Update Food Item Test case
     @Test
     @DisplayName("Update Food Item ")
-    void testUpdateFoodItemById() throws CustomException {
+    void testUpdateFoodItemById() throws DynamoException {
 
         // Admin Access Checking using Private Method
         adminAccessChecking(user.getUserId());
@@ -133,7 +134,7 @@ class FoodItemServiceImplTest {
     // Delete Food item test case
     @Test
     @DisplayName("Delete Food Item ")
-    void testDeleteFoodItemById() throws CustomException {
+    void testDeleteFoodItemById() throws DynamoException {
 
         repository.save(foodItem);
 

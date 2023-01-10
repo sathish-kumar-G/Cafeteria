@@ -41,21 +41,21 @@ public class FoodMenu implements Serializable {
     private long foodMenuId;
 
     /**
-     * Food Menu Name
+     * Food Menu Name.
      */
     @Schema(example = "Indian", description = "Food Menu Name")
     @Column(name = "food_menu_name")
     private String foodMenuName;
 
     /**
-     * Food Menu Type
+     * Food Menu Type.
      */
     @Schema(example = "veg", description = "Food Menu Type")
     @Column(name = "food_menu_type")
     private String foodMenuType;
 
     /**
-     * Food Menu Status
+     * Food Menu Status.
      */
     @Schema(example = "active", description = "Food Menu is Active or not")
     @Column(name = "food_menu_available_date")

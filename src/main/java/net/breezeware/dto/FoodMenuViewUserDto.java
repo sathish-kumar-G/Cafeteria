@@ -9,7 +9,7 @@ import net.breezeware.entity.FoodMenu;
 import lombok.Data;
 
 /**
- * FoodMenuViewUserDto is used to Get the List of Active FoodMenu with Food Items by User
+ * FoodMenuViewUserDto is used to Get the List of Active FoodMenu with Food Items by User.
  */
 @Data
 public class FoodMenuViewUserDto {

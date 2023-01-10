@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.validation.Valid;
 
+import net.breezeware.dynamo.utils.exception.DynamoException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -45,7 +46,7 @@ public class FoodItemController {
      * @param  foodItem        this foodItem data is to be created.
      * @param  userId          this id is used to find the Admin.
      * @return                 Created new Food Item.
-     * @throws CustomException if foodItem is null or conflict value.
+     * @throws DynamoException if foodItem is null or conflict value.
      */
     @PostMapping("user/{admin-id}/food-item")
     @Operation(method = "POST", summary = "Create the Food Item", description = "Create the Food Item")
@@ -75,7 +76,7 @@ public class FoodItemController {
                 examples = { @ExampleObject(name = "Error-415",
                         value = "{\"statusCode\":\"415\",\"message\":\"Unsupported Media Type\",\"details\":\"Please Enter Correct Value\"}") })) })
     public FoodItem createFoodItem(@Valid @RequestBody FoodItem foodItem, @PathVariable(name = "admin-id") long userId)
-            throws CustomException {
+            throws DynamoException {
         log.info("Entering createFoodItem");
         FoodItem saveItem = foodItemService.createFoodItem(foodItem, userId);
         log.info("Leaving createFoodItem");
@@ -113,7 +114,7 @@ public class FoodItemController {
                 mediaType = "application.json", schema = @Schema(implementation = ErrorResponse.class),
                 examples = { @ExampleObject(name = "Error-415",
                         value = "{\"statusCode\":\"415\",\"message\":\"Unsupported Media Type\",\"details\":\"Please Enter Correct Value\"}") })) })
-    public List<FoodItem> viewAllFoodItem(@PathVariable(name = "admin-id") long userId) throws CustomException {
+    public List<FoodItem> viewAllFoodItem(@PathVariable(name = "admin-id") long userId) throws DynamoException {
         log.info("Entering viewAllFoodItem");
         List<FoodItem> allFoodItem = foodItemService.viewAllFoodItem(userId);
         log.info("Leaving viewAllFoodItem");
@@ -127,7 +128,7 @@ public class FoodItemController {
      * @param  foodItemId      this id is used to find the foodItem.
      * @param  userId          this id is used to find the Admin.
      * @return                 the updated Food item.
-     * @throws CustomException if foodItem or Admin is not found.
+     * @throws DynamoException if foodItem or Admin is not found.
      */
     @PutMapping("user/{admin-id}/food-item/{food-item-id}")
     @Operation(method = "PUT", summary = "Update the Food Item", description = "Update the Food Item")
@@ -161,7 +162,7 @@ public class FoodItemController {
                         value = "{\"statusCode\":\"415\",\"message\":\"Unsupported Media Type\",\"details\":\"Please Enter Correct Value\"}") })) })
     public FoodItem updateFoodItemById(@Valid @RequestBody FoodItem foodItem,
             @PathVariable(name = "food-item-id") long foodItemId, @PathVariable(name = "admin-id") long userId)
-            throws CustomException {
+            throws DynamoException {
         log.info("Entering updateFoodItemById");
         FoodItem updateFoodItem = foodItemService.updateFoodItemById(foodItem, foodItemId, userId);
         log.info("Leaving updateFoodItemById");
@@ -174,7 +175,7 @@ public class FoodItemController {
      * Delete the Food Item by Admin
      * @param  foodItemId      this id is used to find the foodItem.
      * @param  userId          this id is used to find the Admin.
-     * @throws CustomException if foodItem or Admin is not found.
+     * @throws DynamoException if foodItem or Admin is not found.
      */
     @DeleteMapping("user/{admin-id}/food-item/{food-item-id}")
     @Operation(method = "DELETE", summary = "Delete the Food Item.", description = "Delete the Food Item.")
@@ -205,7 +206,7 @@ public class FoodItemController {
                 examples = { @ExampleObject(name = "Error-415",
                         value = "{\"statusCode\":\"415\",\"message\":\"Unsupported Media Type\",\"details\":\"Please Enter Correct Value\"}") })) })
     public void deleteFoodItemById(@PathVariable(name = "food-item-id") long foodItemId,
-            @PathVariable(name = "admin-id") long userId) throws CustomException {
+            @PathVariable(name = "admin-id") long userId) throws DynamoException {
         log.info("Entering deleteFoodItemById");
         foodItemService.deleteFoodItemById(foodItemId, userId);
         log.info("Leaving deleteFoodItemById");

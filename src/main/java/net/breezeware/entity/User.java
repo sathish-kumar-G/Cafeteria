@@ -37,28 +37,28 @@ public class User implements Serializable {
     private long userId;
 
     /**
-     * first_Name for user
+     * first_Name for user.
      */
     @Schema(example = "sathish", description = "First Name")
     @Column(name = "first_name")
     private String firstName;
 
     /**
-     * last_Name for user
+     * last_Name for user.
      */
     @Schema(example = "kumar", description = "Last Name")
     @Column(name = "last_name")
     private String lastName;
 
     /**
-     * email_Id for user
+     * email_Id for user.
      */
     @Schema(example = "sathish@gmail.com", description = "Email Id")
     @Column(name = "email")
     private String emailId;
 
     /**
-     * password for user
+     * password for user.
      */
     @Schema(example = "sathish@123", description = "Password")
     @Column(name = "password")

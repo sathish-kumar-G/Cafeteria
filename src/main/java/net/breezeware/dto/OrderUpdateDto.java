@@ -18,7 +18,7 @@ public class OrderUpdateDto {
     private List<ViewUserOrderFoodItem> foodItem;
 
     /**
-     * Order Amount
+     * Order Amount.
      */
     @Schema(example = "2343", description = "Order Food Item Amount")
     private long amount;

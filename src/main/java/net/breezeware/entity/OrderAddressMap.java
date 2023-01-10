@@ -31,7 +31,7 @@ import lombok.NoArgsConstructor;
 public class OrderAddressMap implements Serializable {
 
     /**
-     * Order Address Map id, Primary Key
+     * Order Address Map id, Primary Key.
      */
     @Schema(example = "1", description = "Order Address Map Id")
     @Id
@@ -43,7 +43,7 @@ public class OrderAddressMap implements Serializable {
     private long orderAddressMapId;
 
     /**
-     * Order, Foreign Key
+     * Order, Foreign Key.
      */
     @Schema(example = "1", description = "Order Id")
     @OneToOne(cascade = CascadeType.ALL)
@@ -51,42 +51,42 @@ public class OrderAddressMap implements Serializable {
     private Order order;
 
     /**
-     * Door Number
+     * Door Number.
      */
     @Schema(example = "1A", description = "Address Door Number")
     @Column(name = "address_door_no")
     private String doorNo;
 
     /**
-     * Street
+     * Street.
      */
     @Schema(example = "Gandhi Street", description = "Address Street")
     @Column(name = "address_street")
     private String street;
 
     /**
-     * City
+     * City.
      */
     @Schema(example = "Coimbatore", description = "Address City")
     @Column(name = "address_district")
     private String city;
 
     /**
-     * State
+     * State.
      */
     @Schema(example = "Tamilnadu", description = "Address State")
     @Column(name = "address_state")
     private String state;
 
     /**
-     * Phone Number
+     * Phone Number.
      */
     @Schema(example = "9524943027", description = "Phone Number")
     @Column(name = "phone_number")
     private String phoneNumber;
 
     /**
-     * Ordered Date
+     * Ordered Date.
      */
     @Schema(example = "21/12/2022", description = "Order Date")
     @Column(name = "order_date")

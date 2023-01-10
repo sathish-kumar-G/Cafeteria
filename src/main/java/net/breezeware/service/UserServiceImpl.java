@@ -3,6 +3,7 @@ package net.breezeware.service;
 import java.util.List;
 import java.util.Optional;
 
+import net.breezeware.dynamo.utils.exception.DynamoException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -34,40 +35,40 @@ public class UserServiceImpl implements UserService {
      * {@inheritDoc}
      */
     @Override
-    public User createUser(User user) throws CustomException {
+    public User createUser(User user) throws DynamoException {
         // TODO Auto-generated method stub
 
         // Already User Available or not Condition Checking
         Optional<User> existUser = userRepository.findByEmailId(user.getEmailId());
 
         if (existUser.isPresent()) {
-            throw new CustomException("User Have Already Account ", HttpStatus.CONFLICT);
+            throw new DynamoException("User Have Already Account ", HttpStatus.CONFLICT);
         }
 
         // Empty value Condition Checking
         if (user.equals(null)) {
-            throw new CustomException("Please fill the User Details", HttpStatus.BAD_REQUEST);
+            throw new DynamoException("Please fill the User Details", HttpStatus.BAD_REQUEST);
         }
 
         if (user.getFirstName().isEmpty()) {
-            throw new CustomException("Please fill the First Name", HttpStatus.BAD_REQUEST);
+            throw new DynamoException("Please fill the First Name", HttpStatus.BAD_REQUEST);
         }
 
         if (user.getLastName().isEmpty()) {
-            throw new CustomException("Please fill the Last Name", HttpStatus.BAD_REQUEST);
+            throw new DynamoException("Please fill the Last Name", HttpStatus.BAD_REQUEST);
         }
 
         if (user.getEmailId().isEmpty() || user.getEmailId() == null) {
-            throw new CustomException("Please fill the  Emai ID", HttpStatus.BAD_REQUEST);
+            throw new DynamoException("Please fill the  Emai ID", HttpStatus.BAD_REQUEST);
         }
 
         if (user.getPassword().isEmpty()) {
-            throw new CustomException("Please fill the  Password", HttpStatus.BAD_REQUEST);
+            throw new DynamoException("Please fill the  Password", HttpStatus.BAD_REQUEST);
         }
 
         // Get the Role of this User
         Role findRole = roleRepository.findById(user.getRoleId())
-                .orElseThrow(() -> new CustomException("please Fill the Correct Role Id", HttpStatus.BAD_REQUEST));
+                .orElseThrow(() -> new DynamoException("please Fill the Correct Role Id", HttpStatus.BAD_REQUEST));
 
         // Save the User And Role in the Map table
         saveUserRoleMap(user, findRole);
@@ -89,7 +90,7 @@ public class UserServiceImpl implements UserService {
      */
     @Override
     public List<User> getUser() {
-        // Get the All Users
+        // Get All Users
         List<User> users = userRepository.findAll();
         // For each loop is used for Get the Role Of the User
         for (User user : users) {
@@ -97,7 +98,7 @@ public class UserServiceImpl implements UserService {
             user.setRoleId(map.get().getRoleId().getRoleId());
         }
 
-        // Return the All Users
+        // Return All Users
         return users;
     }
 
@@ -105,10 +106,10 @@ public class UserServiceImpl implements UserService {
      * {@inheritDoc}
      */
     @Override
-    public User userFindById(long userId) throws CustomException {
+    public User userFindById(long userId) throws DynamoException {
         // User Available or not Condition Checking
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new CustomException("User is Not Found ", HttpStatus.NOT_FOUND));
+                .orElseThrow(() -> new DynamoException("User is Not Found ", HttpStatus.NOT_FOUND));
         // User Role Get
         Optional<UserRoleMap> map = userRoleMapRepository.findByUserId(user);
         user.setRoleId(map.get().getRoleId().getRoleId());
@@ -120,10 +121,10 @@ public class UserServiceImpl implements UserService {
      * {@inheritDoc}
      */
     @Override
-    public User updateUserById(long userId, User user) throws CustomException {
+    public User updateUserById(long userId, User user) throws DynamoException {
         // User Available or not Condition Checking
         User updateUser = userRepository.findById(userId)
-                .orElseThrow(() -> new CustomException("User is Not Available", HttpStatus.NOT_FOUND));
+                .orElseThrow(() -> new DynamoException("User is Not Available", HttpStatus.NOT_FOUND));
 
         // Update the Users Record
         updateUser.setFirstName(user.getFirstName());
@@ -133,19 +134,19 @@ public class UserServiceImpl implements UserService {
 
         // Empty Value Checking
         if (updateUser.getFirstName().isEmpty()) {
-            throw new CustomException("Please fill the First Name", HttpStatus.BAD_REQUEST);
+            throw new DynamoException("Please fill the First Name", HttpStatus.BAD_REQUEST);
         }
 
         if (updateUser.getLastName().isEmpty()) {
-            throw new CustomException("Please fill the Last Name", HttpStatus.BAD_REQUEST);
+            throw new DynamoException("Please fill the Last Name", HttpStatus.BAD_REQUEST);
         }
 
         if (updateUser.getEmailId().isEmpty()) {
-            throw new CustomException("Please fill the  Emai ID", HttpStatus.BAD_REQUEST);
+            throw new DynamoException("Please fill the  Emai ID", HttpStatus.BAD_REQUEST);
         }
 
         if (updateUser.getPassword().isEmpty()) {
-            throw new CustomException("Please fill the  Password", HttpStatus.BAD_REQUEST);
+            throw new DynamoException("Please fill the  Password", HttpStatus.BAD_REQUEST);
         }
 
         // Save Updated User
@@ -157,10 +158,10 @@ public class UserServiceImpl implements UserService {
      * {@inheritDoc}
      */
     @Override
-    public void deleteUserById(long userId) throws CustomException {
+    public void deleteUserById(long userId) throws DynamoException {
         // User Available or not Condition Checking
         User existUser = userRepository.findById(userId)
-                .orElseThrow(() -> new CustomException("User Is Not Available", HttpStatus.NOT_FOUND));
+                .orElseThrow(() -> new DynamoException("User Is Not Available", HttpStatus.NOT_FOUND));
 
         // Delete this User in User Role Map table and User Table
         userRoleMapRepository.deleteByUserId(existUser);

@@ -1,7 +1,7 @@
 package net.breezeware.enumeration;
 
 /**
- * OrderStatus Enum is used to Set and Update the Order Status
+ * OrderStatus Enum is used to Set and Update the Order Status.
  */
 public enum OrderStatus {
 

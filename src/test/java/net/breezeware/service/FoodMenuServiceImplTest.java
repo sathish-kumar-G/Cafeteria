@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import net.breezeware.dynamo.utils.exception.DynamoException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -74,7 +75,7 @@ class FoodMenuServiceImplTest {
     // Create Food Menu Test Case
     @Test
     @DisplayName("Create Food Menu Test")
-    void testCreateFoodMenu() throws CustomException {
+    void testCreateFoodMenu() throws DynamoException {
 
         // Admin Access Checked using Private Method
         adminAccessChecking(user.getUserId());
@@ -121,7 +122,7 @@ class FoodMenuServiceImplTest {
     // Create Food Menu Custom Exception throw Test case
     @Test
     @DisplayName("Exception Test Case")
-    void testCustomException_nullValue() throws CustomException {
+    void testDynamoException_nullValue() throws DynamoException {
         FoodMenuDto dto = new FoodMenuDto();
         foodMenu.setFoodMenuId(1);
         foodMenu.setFoodMenuName("Indian");
@@ -130,7 +131,7 @@ class FoodMenuServiceImplTest {
 
         dto.setFoodMenu(foodMenu);
 
-        assertThrows(CustomException.class, () -> {
+        assertThrows(DynamoException.class, () -> {
             service.createFoodMenu(dto, user.getUserId());
         });
     }
@@ -138,7 +139,7 @@ class FoodMenuServiceImplTest {
     // Get Food Menu By Id Test case
     @Test
     @DisplayName("Get All Food Menu")
-    void testGetFoodMenuById() throws CustomException {
+    void testGetFoodMenuById() throws DynamoException {
 
         // Admin Access Checked using Private Method
         adminAccessChecking(user.getUserId());
@@ -170,7 +171,7 @@ class FoodMenuServiceImplTest {
     // Update Food Menu Test Case
     @Test
     @DisplayName("Update Food Menu")
-    void testUpdateFoodMenu() throws CustomException {
+    void testUpdateFoodMenu() throws DynamoException {
 
         // Admin Access Checked using Private Method
         adminAccessChecking(user.getUserId());
@@ -200,7 +201,7 @@ class FoodMenuServiceImplTest {
     // User Get All Active Food Menu with Food Items
     @Test
     @DisplayName("Get All Active Food Menu by User")
-    void testGetAllActiveFoodMenu() throws CustomException {
+    void testGetAllActiveFoodMenu() throws DynamoException {
 
         // user case
         when(userRepository.findById(user.getUserId())).thenReturn(Optional.of(user));

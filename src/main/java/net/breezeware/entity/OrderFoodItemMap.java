@@ -29,7 +29,7 @@ import lombok.NoArgsConstructor;
 public class OrderFoodItemMap implements Serializable {
 
     /**
-     * Primary Key Order FoodItem Map id
+     * Primary Key Order FoodItem Map id.
      */
     @Schema(example = "1", description = "Order FoodItem Map Id")
     @Id
@@ -41,7 +41,7 @@ public class OrderFoodItemMap implements Serializable {
     private long OrderFoodItemMapId;
 
     /**
-     * Foreign Key Order details
+     * Foreign Key Order details.
      */
     @Schema(example = "4", description = "Order Id")
     @OneToOne(cascade = CascadeType.ALL)
@@ -49,7 +49,7 @@ public class OrderFoodItemMap implements Serializable {
     private Order order;
 
     /**
-     * Foreign Key Food Item Data
+     * Foreign Key Food Item Data.
      */
     @Schema(example = "4", description = "Food Item Id")
     @OneToOne(cascade = CascadeType.ALL)

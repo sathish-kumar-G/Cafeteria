@@ -9,6 +9,7 @@ import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 
+import net.breezeware.dynamo.utils.exception.DynamoException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -49,7 +50,7 @@ public class OrderServiceImpl implements OrderService {
      * {@inheritDoc}
      */
     @Override
-    public Order addFoodItemsToOrder(@Valid OrderDto orderDto, long userId) throws CustomException {
+    public Order addFoodItemsToOrder(@Valid OrderDto orderDto, long userId) throws DynamoException {
 
         // Check User is Available or not and Customer Access Checking
         User user = customerAccessChecking(userId);
@@ -63,15 +64,15 @@ public class OrderServiceImpl implements OrderService {
 
             // Check Food Item is Available or not, and Get Food Items
             FoodItem foodItem = foodItemRepository.findById(orderItems.getFoodItemId())
-                    .orElseThrow(() -> new CustomException("Food Item is not Available", HttpStatus.NOT_FOUND));
+                    .orElseThrow(() -> new DynamoException("Food Item is not Available", HttpStatus.NOT_FOUND));
 
             // Check Food Item is Available or not, and Get Food Menu Item Map
             FoodMenuItemMap foodMenuItemMap = foodMenuItemMapRepository.findByFoodItem(foodItem)
-                    .orElseThrow(() -> new CustomException("Food Item  not Available", HttpStatus.NOT_FOUND));
+                    .orElseThrow(() -> new DynamoException("Food Item  not Available", HttpStatus.NOT_FOUND));
 
             // Check Food Item Count
             if (foodMenuItemMap.getFoodCount() < orderItems.getQty()) {
-                throw new CustomException("Food Item Quantity is not Sufficient", HttpStatus.SERVICE_UNAVAILABLE);
+                throw new DynamoException("Food Item Quantity is not Sufficient", HttpStatus.SERVICE_UNAVAILABLE);
             }
 
             // Update the Food Count
@@ -107,7 +108,7 @@ public class OrderServiceImpl implements OrderService {
      * {@inheritDoc}
      */
     @Override
-    public List<OrderViewDto> viewUserOrder(long userId) throws CustomException {
+    public List<OrderViewDto> viewUserOrder(long userId) throws DynamoException {
 
         // Check User is Available or not and Customer Access Checking
         User user = customerAccessChecking(userId);
@@ -125,11 +126,11 @@ public class OrderServiceImpl implements OrderService {
 
     /**
      * {@inheritDoc}
-     * @throws CustomException
+     * @throws DynamoException
      */
     @Override
     public OrderUpdateDto updateTheOrderByUserId(OrderUpdateDto orderUpdateDto, long userId, long orderId)
-            throws CustomException {
+            throws DynamoException {
 
         // Check User is Available or not and Customer Access Checking using Private
         // Method
@@ -137,11 +138,11 @@ public class OrderServiceImpl implements OrderService {
 
         // Check Order is Available or not
         Order order = orderRepository.findById(orderId)
-                .orElseThrow(() -> new CustomException("Order is Not Available", HttpStatus.NOT_FOUND));
+                .orElseThrow(() -> new DynamoException("Order is Not Available", HttpStatus.NOT_FOUND));
 
         // Check This User have this Order
         orderRepository.findByOrderIdAndUser(order.getOrderId(), user).orElseThrow(
-                () -> new CustomException("This Order is not Available For this User", HttpStatus.NOT_FOUND));
+                () -> new DynamoException("This Order is not Available For this User", HttpStatus.NOT_FOUND));
 
         // Declare amount for Get Total amount in Order
         long amount = 0;
@@ -151,7 +152,7 @@ public class OrderServiceImpl implements OrderService {
 
             // Check Food Item is Available and Get Food item for this order
             FoodItem foodItem = foodItemRepository.findById(foodItemList.getFoodItemId())
-                    .orElseThrow(() -> new CustomException("Food Item is not Available", HttpStatus.NOT_FOUND));
+                    .orElseThrow(() -> new DynamoException("Food Item is not Available", HttpStatus.NOT_FOUND));
 
             // Set the Food Item details in Dto for Get Output JSON data
             foodItemList.setFoodName(foodItem.getFoodName());
@@ -160,13 +161,13 @@ public class OrderServiceImpl implements OrderService {
             // Check Food Items For this Order and Get Food Items
             OrderFoodItemMap foodItemMap =
                     orderFoodItemMapRepository.findByOrderAndFoodItemFoodItemId(order, foodItemList.getFoodItemId())
-                            .orElseThrow(() -> new CustomException("Food Item is not Available For this Order",
+                            .orElseThrow(() -> new DynamoException("Food Item is not Available For this Order",
                                     HttpStatus.NOT_MODIFIED));
             // System.out.println(foodItemMap);
 
             // Check Food Item is Available or not, and Get Food Menu Item Map
             FoodMenuItemMap foodMenuItemMap = foodMenuItemMapRepository.findByFoodItem(foodItem)
-                    .orElseThrow(() -> new CustomException("Food Item is not Available", HttpStatus.NOT_FOUND));
+                    .orElseThrow(() -> new DynamoException("Food Item is not Available", HttpStatus.NOT_FOUND));
 
             // Update the Food Count in Food Menu Map Table
             foodMenuItemMap.setFoodCount(foodMenuItemMap.getFoodCount() + foodItemMap.getQuantity());
@@ -176,7 +177,7 @@ public class OrderServiceImpl implements OrderService {
 
             // Check Food Item Count is Sufficient or not
             if (foodMenuItemMap.getFoodCount() < foodItemList.getQty()) {
-                throw new CustomException("Food Item Quantity is not Sufficient", HttpStatus.INSUFFICIENT_STORAGE);
+                throw new DynamoException("Food Item Quantity is not Sufficient", HttpStatus.INSUFFICIENT_STORAGE);
             }
 
             // Update the Food Count in Food Menu Map Table
@@ -217,44 +218,44 @@ public class OrderServiceImpl implements OrderService {
      */
     @Override
     public OrderAddressMap placeAnOrderByUser(OrderAddressMap orderAddressMap, long userId, long orderId)
-            throws CustomException {
+            throws DynamoException {
 
         // Check User is Available or not and Customer Access Checking
         User user = customerAccessChecking(userId);
 
         // Check Order is Available or not and Get the Order
         Order order = orderRepository.findById(orderId)
-                .orElseThrow(() -> new CustomException("Order is Not Available", HttpStatus.NOT_FOUND));
+                .orElseThrow(() -> new DynamoException("Order is Not Available", HttpStatus.NOT_FOUND));
 
         // Check Whether User Have this Order or not
         Order orderUser = orderRepository.findByOrderIdAndUser(orderId, user)
-                .orElseThrow(() -> new CustomException("This User is not Having this Order", HttpStatus.UNAUTHORIZED));
+                .orElseThrow(() -> new DynamoException("This User is not Having this Order", HttpStatus.UNAUTHORIZED));
 
         // Check The Order is Already placed or Cancelled
         if (orderUser.getStatus().equals(PLACED.getStatus()) || orderUser.getStatus().equals(CANCEL.getStatus())) {
-            throw new CustomException("The Order is Already Placed/Cancelled", HttpStatus.CONFLICT);
+            throw new DynamoException("The Order is Already Placed/Cancelled", HttpStatus.CONFLICT);
         }
 
         // Check value is Empty
         if (orderAddressMap.getDoorNo().isEmpty() || orderAddressMap.getDoorNo().isBlank()) {
-            throw new CustomException("Please Fill the Door number", HttpStatus.BAD_REQUEST);
+            throw new DynamoException("Please Fill the Door number", HttpStatus.BAD_REQUEST);
         }
 
         if (orderAddressMap.getStreet().isEmpty() || orderAddressMap.getStreet().isBlank()) {
-            throw new CustomException("Please Fill the Street details", HttpStatus.BAD_REQUEST);
+            throw new DynamoException("Please Fill the Street details", HttpStatus.BAD_REQUEST);
         }
 
         if (orderAddressMap.getCity().isEmpty() || orderAddressMap.getCity().isBlank()) {
-            throw new CustomException("Please Fill the City Name", HttpStatus.BAD_REQUEST);
+            throw new DynamoException("Please Fill the City Name", HttpStatus.BAD_REQUEST);
         }
 
         if (orderAddressMap.getState().isEmpty() || orderAddressMap.getState().isBlank()) {
-            throw new CustomException("Please Fill the State Name", HttpStatus.BAD_REQUEST);
+            throw new DynamoException("Please Fill the State Name", HttpStatus.BAD_REQUEST);
         }
 
         if (orderAddressMap.getPhoneNumber().isEmpty() || orderAddressMap.getPhoneNumber().isBlank()
                 || orderAddressMap.getPhoneNumber().length() != 10) {
-            throw new CustomException("Please Fill the Correct Phone number", HttpStatus.BAD_REQUEST);
+            throw new DynamoException("Please Fill the Correct Phone number", HttpStatus.BAD_REQUEST);
         }
 
         // Set and Save the Order Status
@@ -277,23 +278,23 @@ public class OrderServiceImpl implements OrderService {
      * {@inheritDoc}
      */
     @Override
-    public void cancelTheOrderByUser(long userId, long orderId) throws CustomException {
+    public void cancelTheOrderByUser(long userId, long orderId) throws DynamoException {
 
         // Check User is Available or not and Customer Access Checking
         User user = customerAccessChecking(userId);
 
         // Check Order is Available or Not
         Order order = orderRepository.findById(orderId)
-                .orElseThrow(() -> new CustomException("Order is Not Available", HttpStatus.NOT_FOUND));
+                .orElseThrow(() -> new DynamoException("Order is Not Available", HttpStatus.NOT_FOUND));
 
         // Check Whether User Have this Order or not
         Order orderUser = orderRepository.findByOrderIdAndUser(order.getOrderId(), user)
-                .orElseThrow(() -> new CustomException("This User is not Having this Order", HttpStatus.UNAUTHORIZED));
+                .orElseThrow(() -> new DynamoException("This User is not Having this Order", HttpStatus.UNAUTHORIZED));
 
         // Check the Order is Process/Cancelled
         if (orderUser.getStatus().equals(PROCESS.getStatus()) || orderUser.getStatus().equals(CANCEL.getStatus())
                 || orderUser.getStatus().equals(DELIVERED.getStatus())) {
-            throw new CustomException("Order is not Eligible for Cancel or Already Cancelled", HttpStatus.NOT_FOUND);
+            throw new DynamoException("Order is not Eligible for Cancel or Already Cancelled", HttpStatus.NOT_FOUND);
         }
 
         // Get Order with List of Food Items
@@ -322,7 +323,7 @@ public class OrderServiceImpl implements OrderService {
      * {@inheritDoc}
      */
     @Override
-    public List<OrderViewDto> getTheListOfActiveOrdersByStaff(long userId) throws CustomException {
+    public List<OrderViewDto> getTheListOfActiveOrdersByStaff(long userId) throws DynamoException {
 
         // Check Staff Access Using Private Method
         staffAccessChecking(userId);
@@ -353,7 +354,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     // Get List of Orders using Private Method
-    private List<OrderViewDto> getOrders(List<Order> orderList) throws CustomException {
+    private List<OrderViewDto> getOrders(List<Order> orderList) throws DynamoException {
 
         // Get List of Orders with food items for this User
         List<OrderViewDto> userViewDtos = new ArrayList<>();
@@ -402,15 +403,15 @@ public class OrderServiceImpl implements OrderService {
     }
 
     // Get And Set the Address Details in Order View Dto
-    private AddressDto setAddress(long orderId) throws CustomException {
+    private AddressDto setAddress(long orderId) throws DynamoException {
 
         // Get the Order Details
         Order order = orderRepository.findById(orderId)
-                .orElseThrow(() -> new CustomException("Order is Not Available", HttpStatus.NOT_FOUND));
+                .orElseThrow(() -> new DynamoException("Order is Not Available", HttpStatus.NOT_FOUND));
 
         // Check the Order is Available or not and Get the Address Details of this Order
         OrderAddressMap orderAddressMap = orderAddressMapRepository.findByOrder(order)
-                .orElseThrow(() -> new CustomException("Order is Not Available", HttpStatus.NOT_FOUND));
+                .orElseThrow(() -> new DynamoException("Order is Not Available", HttpStatus.NOT_FOUND));
 
         // Set the Address Details in Dto
         AddressDto address = new AddressDto();
@@ -429,14 +430,14 @@ public class OrderServiceImpl implements OrderService {
      * {@inheritDoc}
      */
     @Override
-    public OrderViewDto viewTheReceivedOrderByStaff(long userId, long orderId) throws CustomException {
+    public OrderViewDto viewTheReceivedOrderByStaff(long userId, long orderId) throws DynamoException {
 
         // Check Staff Access and Get the Order using Private Method
         Order order = staffAccessAndOrderChecking(userId, orderId);
 
         // Check Status of Order is Placed/Received or not
         if ((!order.getStatus().equals(PLACED.getStatus())) && (!order.getStatus().equals(RECEIVED.getStatus()))) {
-            throw new CustomException("Order is not Available", HttpStatus.NOT_FOUND);
+            throw new DynamoException("Order is not Available", HttpStatus.NOT_FOUND);
         }
 
         // Get the List Of All Orders
@@ -478,14 +479,14 @@ public class OrderServiceImpl implements OrderService {
      * {@inheritDoc}
      */
     @Override
-    public void updateTheOrderStatusToOrderPreparedByStaff(long userId, long orderId) throws CustomException {
+    public void updateTheOrderStatusToOrderPreparedByStaff(long userId, long orderId) throws DynamoException {
 
         // Check Staff Access and Get the Order using Private Method
         Order order = staffAccessAndOrderChecking(userId, orderId);
 
         // Check Order is Received or not
         if (!order.getStatus().equals(RECEIVED.getStatus())) {
-            throw new CustomException("Order is Not Received", HttpStatus.NOT_FOUND);
+            throw new DynamoException("Order is Not Received", HttpStatus.NOT_FOUND);
         }
 
         // Update and Save the Order Status
@@ -498,14 +499,14 @@ public class OrderServiceImpl implements OrderService {
      * {@inheritDoc}
      */
     @Override
-    public void updateTheOrderStatusToPendingDeliveryByStaff(long userId, long orderId) throws CustomException {
+    public void updateTheOrderStatusToPendingDeliveryByStaff(long userId, long orderId) throws DynamoException {
 
         // Check Staff Access and Get the Order using Private Method
         Order order = staffAccessAndOrderChecking(userId, orderId);
 
         // Check Order is Received or not
         if (!order.getStatus().equals(PREPARED.getStatus())) {
-            throw new CustomException("Order is Not Received/Prepared", HttpStatus.NOT_FOUND);
+            throw new DynamoException("Order is Not Received/Prepared", HttpStatus.NOT_FOUND);
         }
 
         // Update and Save the Order Status
@@ -518,14 +519,14 @@ public class OrderServiceImpl implements OrderService {
      * {@inheritDoc}
      */
     @Override
-    public void updateTheOrderStatusToOrderDeliveredByStaff(long userId, long orderId) throws CustomException {
+    public void updateTheOrderStatusToOrderDeliveredByStaff(long userId, long orderId) throws DynamoException {
 
         // Check Staff Access and Get the Order using Private Method
         Order order = staffAccessAndOrderChecking(userId, orderId);
 
         // Check Order is Received or not
         if (!order.getStatus().equals(PENDING.getStatus())) {
-            throw new CustomException("Order is Not Received/Prepared/Packed", HttpStatus.NOT_FOUND);
+            throw new DynamoException("Order is Not Received/Prepared/Packed", HttpStatus.NOT_FOUND);
         }
 
         // Update and Save the Order Status
@@ -535,58 +536,58 @@ public class OrderServiceImpl implements OrderService {
     }
 
     // This Method is used for Check the Staff Access and Order
-    private Order staffAccessAndOrderChecking(long userId, long orderId) throws CustomException {
+    private Order staffAccessAndOrderChecking(long userId, long orderId) throws DynamoException {
         // Check Valid User or Not
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new CustomException("User is Not Found", HttpStatus.NOT_FOUND));
+                .orElseThrow(() -> new DynamoException("User is Not Found", HttpStatus.NOT_FOUND));
 
         // Check Staff have Role or not
         UserRoleMap userRoleMap = userRoleMapRepository.findByUserId(user)
-                .orElseThrow(() -> new CustomException("User Don't have any Role", HttpStatus.UNAUTHORIZED));
+                .orElseThrow(() -> new DynamoException("User Don't have any Role", HttpStatus.UNAUTHORIZED));
 
         // Staff Access Checking
         if (userRoleMap.getRoleId().getRoleId() != 2) {
-            throw new CustomException("Not Access For This User", HttpStatus.UNAUTHORIZED);
+            throw new DynamoException("Not Access For This User", HttpStatus.UNAUTHORIZED);
         }
 
         // Check And Get the Order Details
         Order order = orderRepository.findById(orderId)
-                .orElseThrow(() -> new CustomException("Order is Not Available", HttpStatus.NOT_FOUND));
+                .orElseThrow(() -> new DynamoException("Order is Not Available", HttpStatus.NOT_FOUND));
 
         return order;
 
     }
 
     // This Private Method is Checking Staff Access Only
-    private void staffAccessChecking(long userId) throws CustomException {
+    private void staffAccessChecking(long userId) throws DynamoException {
         // Check Valid User or Not
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new CustomException("User is Not Found", HttpStatus.NOT_FOUND));
+                .orElseThrow(() -> new DynamoException("User is Not Found", HttpStatus.NOT_FOUND));
 
         // Check Staff have Role or not
         UserRoleMap userRoleMap = userRoleMapRepository.findByUserId(user)
-                .orElseThrow(() -> new CustomException("User Don't have any Role", HttpStatus.UNAUTHORIZED));
+                .orElseThrow(() -> new DynamoException("User Don't have any Role", HttpStatus.UNAUTHORIZED));
 
         // Staff Access Checking
         if (userRoleMap.getRoleId().getRoleId() != 2) {
-            throw new CustomException("Not Access For This User", HttpStatus.UNAUTHORIZED);
+            throw new DynamoException("Not Access For This User", HttpStatus.UNAUTHORIZED);
         }
 
     }
 
     // This Private Method is Checking User Access Only
-    private User customerAccessChecking(long userId) throws CustomException {
+    private User customerAccessChecking(long userId) throws DynamoException {
         // Check Valid User or Not
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new CustomException("User is Not Found", HttpStatus.NOT_FOUND));
+                .orElseThrow(() -> new DynamoException("User is Not Found", HttpStatus.NOT_FOUND));
 
         // Check Staff have Role or not
         UserRoleMap userRoleMap = userRoleMapRepository.findByUserId(user)
-                .orElseThrow(() -> new CustomException("User Don't have any Role", HttpStatus.UNAUTHORIZED));
+                .orElseThrow(() -> new DynamoException("User Don't have any Role", HttpStatus.UNAUTHORIZED));
 
         // Customer Access Checking
         if (userRoleMap.getRoleId().getRoleId() != 3) {
-            throw new CustomException("Not Access For This User", HttpStatus.UNAUTHORIZED);
+            throw new DynamoException("Not Access For This User", HttpStatus.UNAUTHORIZED);
         }
 
         return user;
@@ -597,7 +598,7 @@ public class OrderServiceImpl implements OrderService {
      * {@inheritDoc}
      */
     @Override
-    public List<OrderViewDto> viewListOfCancelOrdersByStaff(long userId) throws CustomException {
+    public List<OrderViewDto> viewListOfCancelOrdersByStaff(long userId) throws DynamoException {
 
         // Check Staff Access Using Private Method
         staffAccessChecking(userId);
@@ -634,14 +635,14 @@ public class OrderServiceImpl implements OrderService {
      * {@inheritDoc}
      */
     @Override
-    public OrderViewDto viewCancelOrderByStaff(long userId, long orderId) throws CustomException {
+    public OrderViewDto viewCancelOrderByStaff(long userId, long orderId) throws DynamoException {
 
         // Check Staff Access and Get the Order using Private Method
         Order order = staffAccessAndOrderChecking(userId, orderId);
 
         // Check Status of Order is Cancel or not
         if (!order.getStatus().equals(CANCEL.getStatus())) {
-            throw new CustomException("Order is not Available", HttpStatus.NOT_FOUND);
+            throw new DynamoException("Order is not Available", HttpStatus.NOT_FOUND);
         }
 
         // Get the List Of All Orders
@@ -680,8 +681,8 @@ public class OrderServiceImpl implements OrderService {
 
             try {
                 cancelOrder.setAddress(setAddress(orderViewDto.getOrderId()));
-            } catch (CustomException e) {
-                new CustomException("Address is Not Available", HttpStatus.NOT_FOUND);
+            } catch (DynamoException e) {
+                new DynamoException("Address is Not Available", HttpStatus.NOT_FOUND);
             }
 
             return cancelOrder;
@@ -696,7 +697,7 @@ public class OrderServiceImpl implements OrderService {
      * {@inheritDoc}
      */
     @Override
-    public List<OrderViewDto> viewListOfCompletedOrdersByStaff(long userId) throws CustomException {
+    public List<OrderViewDto> viewListOfCompletedOrdersByStaff(long userId) throws DynamoException {
 
         // Check Staff Access Using Private Method
         staffAccessChecking(userId);
@@ -733,14 +734,14 @@ public class OrderServiceImpl implements OrderService {
      * {@inheritDoc}
      */
     @Override
-    public OrderViewDto viewCompletedOrderByStaff(long userId, long orderId) throws CustomException {
+    public OrderViewDto viewCompletedOrderByStaff(long userId, long orderId) throws DynamoException {
 
         // Check Staff Access and Get the Order using Private Method
         Order order = staffAccessAndOrderChecking(userId, orderId);
 
         // Check Status of Order is Cancel or not
         if (!order.getStatus().equals(DELIVERED.getStatus())) {
-            throw new CustomException("Order is not Available", HttpStatus.NOT_FOUND);
+            throw new DynamoException("Order is not Available", HttpStatus.NOT_FOUND);
         }
 
         // Get the List Of All Orders
@@ -773,8 +774,8 @@ public class OrderServiceImpl implements OrderService {
                     ov.setAmount(orderViewDto.getAmount());
                     try {
                         ov.setAddress(setAddress(orderViewDto.getOrderId()));
-                    } catch (CustomException e) {
-                        new CustomException("Address is Not Available", HttpStatus.NOT_FOUND);
+                    } catch (DynamoException e) {
+                        new DynamoException("Address is Not Available", HttpStatus.NOT_FOUND);
                     }
 
                     return ov;

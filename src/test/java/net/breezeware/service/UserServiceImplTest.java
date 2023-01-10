@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import net.breezeware.dynamo.utils.exception.DynamoException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -57,7 +58,7 @@ class UserServiceImplTest {
     // Create User test Case
     @Test
     @DisplayName("Create New User Test")
-    void testCreateUser() throws CustomException {
+    void testCreateUser() throws DynamoException {
         // User user = new User();
         Role role = new Role();
         UserRoleMap map = new UserRoleMap();
@@ -89,13 +90,13 @@ class UserServiceImplTest {
      */
     @Test
     @DisplayName("Exception Test case")
-    void testCreateUser_withNullEmailId_throwsCustomException() throws CustomException {
+    void testCreateUser_withNullEmailId_throwsCustomException() throws DynamoException {
         user.setFirstName("sathish");
         user.setLastName("kumar");
         user.setEmailId("");
         user.setPassword("sathish@123");
 
-        assertThrows(CustomException.class, () -> {
+        assertThrows(DynamoException.class, () -> {
             service.createUser(user);
         });
     }
@@ -126,7 +127,7 @@ class UserServiceImplTest {
     // Test Find by id case
     @Test
     @DisplayName("User Find By Id Test")
-    void testUserFindById() throws CustomException {
+    void testUserFindById() throws DynamoException {
 
         // User case
         when(repository.findById(anyLong())).thenReturn(Optional.of(user));
@@ -147,7 +148,7 @@ class UserServiceImplTest {
     // Update User By id Test Case
     @Test
     @DisplayName("Update User Test case")
-    void testUpdateUserById() throws CustomException {
+    void testUpdateUserById() throws DynamoException {
 
         when(repository.findById(user.getUserId())).thenReturn(Optional.of(user));
 
@@ -166,7 +167,7 @@ class UserServiceImplTest {
     // Delete User BY Id Test Case
     @Test
     @DisplayName("Delete User Test Case")
-    void testDeleteUserById() throws CustomException {
+    void testDeleteUserById() throws DynamoException {
 
         repository.save(user);
 

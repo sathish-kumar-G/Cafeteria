@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import javax.validation.Valid;
 
+import net.breezeware.dynamo.utils.exception.DynamoException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -36,7 +37,7 @@ public class FoodItemServiceImpl implements FoodItemService {
      * {@inheritDoc}
      */
     @Override
-    public FoodItem createFoodItem(@Valid FoodItem foodItem, long userId) throws CustomException {
+    public FoodItem createFoodItem(@Valid FoodItem foodItem, long userId) throws DynamoException {
 
         // Admin Access Checking using Private Method
         adminAccessChecking(userId);
@@ -45,16 +46,16 @@ public class FoodItemServiceImpl implements FoodItemService {
         Optional<FoodItem> existItem = foodItemRepository.findByFoodName(foodItem.getFoodName());
 
         if (existItem.isPresent()) {
-            throw new CustomException("This Food Item Is Already Added", HttpStatus.CONFLICT);
+            throw new DynamoException("This Food Item Is Already Added", HttpStatus.CONFLICT);
         }
 
         // Empty Value Condition Checking
         if (foodItem.getFoodName().isEmpty() || foodItem.getFoodName().isBlank()) {
-            throw new CustomException("Please Fill the Food Name", HttpStatus.BAD_REQUEST);
+            throw new DynamoException("Please Fill the Food Name", HttpStatus.BAD_REQUEST);
         }
 
         if (java.util.Objects.isNull(foodItem.getFoodPrice())) {
-            throw new CustomException("Please Fill the Food price", HttpStatus.BAD_REQUEST);
+            throw new DynamoException("Please Fill the Food price", HttpStatus.BAD_REQUEST);
         }
 
         // Save Food Item
@@ -62,17 +63,17 @@ public class FoodItemServiceImpl implements FoodItemService {
     }
 
     // Private method is used for Check Admin Access process
-    private void adminAccessChecking(long userId) throws CustomException {
+    private void adminAccessChecking(long userId) throws DynamoException {
         // User is Available or Not Condition Checking
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new CustomException("User Is not Available", HttpStatus.NOT_FOUND));
+                .orElseThrow(() -> new DynamoException("User Is not Available", HttpStatus.NOT_FOUND));
 
         UserRoleMap userRoleMap = userRoleMapRepository.findByUserId(user)
-                .orElseThrow(() -> new CustomException("Admin Access Only", HttpStatus.NOT_FOUND));
+                .orElseThrow(() -> new DynamoException("Admin Access Only", HttpStatus.NOT_FOUND));
 
         // Admin Access Checking
         if (userRoleMap.getRoleId().getRoleId() != 1) {
-            throw new CustomException("Not Access For This User", HttpStatus.UNAUTHORIZED);
+            throw new DynamoException("Not Access For This User", HttpStatus.UNAUTHORIZED);
         }
 
     }
@@ -81,7 +82,7 @@ public class FoodItemServiceImpl implements FoodItemService {
      * {@inheritDoc}
      */
     @Override
-    public List<FoodItem> viewAllFoodItem(long userId) throws CustomException {
+    public List<FoodItem> viewAllFoodItem(long userId) throws DynamoException {
 
         // Admin Access Checking using Private Method
         adminAccessChecking(userId);
@@ -94,14 +95,14 @@ public class FoodItemServiceImpl implements FoodItemService {
      * {@inheritDoc}
      */
     @Override
-    public FoodItem updateFoodItemById(@Valid FoodItem foodItem, long foodItemId, long userId) throws CustomException {
+    public FoodItem updateFoodItemById(@Valid FoodItem foodItem, long foodItemId, long userId) throws DynamoException {
 
         // Admin Access Checking using Private Method
         adminAccessChecking(userId);
 
         // Food Item is Available or not Condition Checking
         FoodItem updateFoodItem = foodItemRepository.findById(foodItemId)
-                .orElseThrow(() -> new CustomException("Food Item is not Available", HttpStatus.NOT_FOUND));
+                .orElseThrow(() -> new DynamoException("Food Item is not Available", HttpStatus.NOT_FOUND));
 
         // Update the New Records
         // Set the Updated value
@@ -116,14 +117,14 @@ public class FoodItemServiceImpl implements FoodItemService {
      * {@inheritDoc}
      */
     @Override
-    public void deleteFoodItemById(long foodItemId, long userId) throws CustomException {
+    public void deleteFoodItemById(long foodItemId, long userId) throws DynamoException {
 
         // Admin Access Checking using Private Method
         adminAccessChecking(userId);
 
         // Already Food Item Available or Not Condition Checking
         FoodItem existItem = foodItemRepository.findById(foodItemId)
-                .orElseThrow(() -> new CustomException("Food Item is Not Available", HttpStatus.NOT_FOUND));
+                .orElseThrow(() -> new DynamoException("Food Item is Not Available", HttpStatus.NOT_FOUND));
 
         // Delete this Food Item
         foodItemRepository.deleteById(existItem.getFoodItemId());

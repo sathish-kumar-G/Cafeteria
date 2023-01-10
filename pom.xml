@@ -3,10 +3,9 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.6.3</version>
-        <relativePath/> <!-- lookup parent from repository -->
+        <artifactId>dynamo-sdk</artifactId>
+        <groupId>net.breezeware.dynamo</groupId>
+        <version>1.13.0-SNAPSHOT</version>
     </parent>
     <groupId>net.breezewere</groupId>
     <artifactId>CafeteriaManagementSystem</artifactId>
@@ -18,6 +17,19 @@
     <properties>
         <java.version>17</java.version>
     </properties>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>net.breezeware.dynamo</groupId>
+                <artifactId>dynamo-sdk-bom</artifactId>
+                <version>${dynamo-sdk-bom.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -49,7 +61,7 @@
             <artifactId>javax.persistence-api</artifactId>
         </dependency>
 
-
+        <!-- Swagger-3 -->
         <dependency>
             <groupId>org.springdoc</groupId>
             <artifactId>springdoc-openapi-ui</artifactId>
@@ -64,6 +76,13 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-oauth2-resource-server</artifactId>
+        </dependency>
+
+        <!--Dynamo Exception Module-->
+        <dependency>
+            <groupId>net.breezeware.dynamo</groupId>
+            <artifactId>dynamo-utils</artifactId>
+            <version>1.13.0-SNAPSHOT</version>
         </dependency>
 
     </dependencies>
@@ -100,6 +119,8 @@
             <!--                    </execution>-->
             <!--                </executions>-->
             <!--            </plugin>-->
+
+            <!-- Maven java docs -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-site-plugin</artifactId>
@@ -123,11 +144,15 @@
                 <version>3.4.1</version>
                 <configuration>
                     <detectLinks>true</detectLinks>
-             <!--       <sourceFileExcludes>
-                        <sourceFileExclude>/home/sathishkumar/Documents/workspace-spring-tool-suite-4-4.16.1.RELEASE/CafeteriaManagementSystem/src/main/java/net/breezeware/CafeteriaManagementSystemApplication.java</sourceFileExclude>
-                        <sourceFileExclude>src/main/java/net/breezeware/controller</sourceFileExclude>
-                    </sourceFileExcludes>-->
-                    <excludePackageNames>net.breezeware.CafeteriaManagementSystemApplication:net.breezeware.controller.*</excludePackageNames>
+                    <!--       <sourceFileExcludes>
+                               <sourceFileExclude>/home/sathishkumar/Documents/workspace-spring-tool-suite-4-4.16.1.RELEASE/CafeteriaManagementSystem/src/main/java/net/breezeware/CafeteriaManagementSystemApplication.java</sourceFileExclude>
+                               <sourceFileExclude>src/main/java/net/breezeware/controller</sourceFileExclude>
+                           </sourceFileExcludes>-->
+                    <excludePackageNames>
+                        net.breezeware.CafeteriaManagementSystemApplication:net.breezeware.controller.*
+                        :net.breezeware.dynamo.utils.exception.*
+                        :net.breezeware.dto.*
+                    </excludePackageNames>
                 </configuration>
                 <reportSets>
                     <reportSet>
