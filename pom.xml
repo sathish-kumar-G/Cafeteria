@@ -24,7 +24,7 @@
         <maven-site-plugin.version>3.9.1</maven-site-plugin.version>
     </properties>
 
-    <!-- Dynamo-sdk-bom Version Manage -->
+    <!-- Dynamo-sdk-bom Version Manage Dependency-->
     <dependencyManagement>
         <dependencies>
             <dependency>
