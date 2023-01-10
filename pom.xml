@@ -18,12 +18,13 @@
         <java.version>17</java.version>
     </properties>
 
+    <!-- Dynamo-sdk-bom Version Manage -->
     <dependencyManagement>
         <dependencies>
             <dependency>
                 <groupId>net.breezeware.dynamo</groupId>
                 <artifactId>dynamo-sdk-bom</artifactId>
-                <version>${dynamo-sdk-bom.version}</version>
+                <version>1.13.0-SNAPSHOT</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
